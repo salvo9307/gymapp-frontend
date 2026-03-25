@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TUO-BACKEND.onrender.com/api'
+  apiUrl: 'https://gymapp-backend-1.onrender.com/api'
 };
