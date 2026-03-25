@@ -1,0 +1,239 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h1>Gestione Palestre</h1>
+      <p>Amministra le palestre del sistema, attivale, disattivale e aggiungine di nuove.</p>
+    </div>
+
+    <button
+      type="button"
+      class="primary-btn"
+      (click)="toggleCreateGymPanel()">
+      {{ showCreateGymPanel ? 'Chiudi pannello' : 'Nuova palestra' }}
+    </button>
+  </div>
+
+  <div class="create-gym-panel" *ngIf="showCreateGymPanel">
+    <h3>Nuova palestra</h3>
+
+    <div class="create-gym-form">
+      <input
+        #gymNameInput
+        type="text"
+        placeholder="Nome palestra"
+        [value]="newGymName"
+        (input)="newGymName = gymNameInput.value"
+      />
+
+      <input
+        #gymCityInput
+        type="text"
+        placeholder="Città"
+        [value]="newGymCity"
+        (input)="newGymCity = gymCityInput.value"
+      />
+
+      <input
+        #managerFirstNameInput
+        type="text"
+        placeholder="Nome manager"
+        [value]="newManagerFirstName"
+        (input)="newManagerFirstName = managerFirstNameInput.value"
+      />
+
+      <input
+        #managerLastNameInput
+        type="text"
+        placeholder="Cognome manager"
+        [value]="newManagerLastName"
+        (input)="newManagerLastName = managerLastNameInput.value"
+      />
+
+      <input
+        #managerEmailInput
+        type="email"
+        placeholder="Email manager"
+        [value]="newManagerEmail"
+        (input)="newManagerEmail = managerEmailInput.value"
+      />
+
+      <input
+        #managerPasswordCreateInput
+        type="password"
+        placeholder="Password manager"
+        [value]="newManagerPassword"
+        (input)="newManagerPassword = managerPasswordCreateInput.value"
+      />
+    </div>
+
+    <div class="feedback-message error" *ngIf="createGymErrorMessage">
+      {{ createGymErrorMessage }}
+    </div>
+
+    <div class="feedback-message success" *ngIf="createGymSuccessMessage">
+      {{ createGymSuccessMessage }}
+    </div>
+
+    <div class="create-gym-actions">
+      <button
+        type="button"
+        class="primary-btn"
+        [disabled]="isCreatingGym"
+        (click)="submitCreateGym()">
+        {{ isCreatingGym ? 'Salvataggio...' : 'Crea palestra' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-box">
+    Caricamento dashboard...
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="state-box error">
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="dashboard && !isLoading">
+    <div class="hero-card">
+      <div class="hero-content">
+        <span class="hero-label">Palestre totali</span>
+        <strong>{{ dashboard.totalGyms }}</strong>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Palestre</h2>
+      <span class="section-count">{{ dashboard.gyms.length }}</span>
+    </div>
+
+    <div class="gym-list">
+      <div class="gym-card" *ngFor="let gym of dashboard.gyms">
+        <div class="gym-card-top">
+          <div class="gym-main-info">
+            <h3>{{ gym.name }}</h3>
+            <p>{{ gym.city || 'Città non specificata' }}</p>
+          </div>
+
+          <div class="gym-top-right">
+            <div class="subscription-box">
+              <div class="subscription-status">
+                <ng-container *ngIf="gym.active; else expiredGym">
+                  <span class="subscription-ok">
+                    Attiva fino al {{ gym.subscriptionEndDate | date:'dd/MM/yyyy' }}
+                  </span>
+                </ng-container>
+
+                <ng-template #expiredGym>
+                  <span class="subscription-no">
+                    {{
+                      gym.subscriptionEndDate
+                        ? 'Abbonamento scaduto'
+                        : 'Nessun abbonamento'
+                    }}
+                  </span>
+                </ng-template>
+              </div>
+
+              <div class="renew-actions">
+                <select #monthsSelect class="renew-select">
+                  <option [value]="1">1 mese</option>
+                  <option [value]="3">3 mesi</option>
+                  <option [value]="6">6 mesi</option>
+                  <option [value]="12">12 mesi</option>
+                </select>
+
+                <button
+                  type="button"
+                  class="renew-btn"
+                  (click)="renewGym(gym.id, +monthsSelect.value)">
+                  {{ gym.active ? 'Estendi' : 'Rinnova' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="gym-side-info">
+              <span
+                class="status-badge"
+                [ngClass]="getGymStatusClass(gym)">
+                {{ getGymStatusLabel(gym) }}
+              </span>
+
+              <div class="gym-badge">
+                #{{ gym.id }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="manager-box">
+          <span class="manager-label">Manager</span>
+
+          <ng-container *ngIf="gym.managerId; else noManager">
+            <strong>{{ gym.managerFirstName }} {{ gym.managerLastName }}</strong>
+            <p>{{ gym.managerEmail }}</p>
+          </ng-container>
+
+          <ng-template #noManager>
+            <strong>Nessun manager associato</strong>
+          </ng-template>
+        </div>
+
+        <div class="gym-actions">
+          <button
+            type="button"
+            class="secondary-btn"
+            [disabled]="updatingGymId === gym.id"
+            (click)="toggleGymStatus(gym)">
+            {{
+              updatingGymId === gym.id
+                ? 'Aggiornamento...'
+                : (gym.active ? 'Disattiva palestra' : 'Riattiva palestra')
+            }}
+          </button>
+
+          <button
+            type="button"
+            class="secondary-btn"
+            [disabled]="!gym.managerId"
+            (click)="toggleResetManagerPasswordPanel(gym.id)">
+            {{
+              openResetPasswordGymId === gym.id
+                ? 'Chiudi reset password'
+                : 'Reset password manager'
+            }}
+          </button>
+        </div>
+
+        <div class="reset-manager-panel" *ngIf="openResetPasswordGymId === gym.id">
+          <h4>Reset password manager</h4>
+
+          <div class="feedback-message error" *ngIf="resetPasswordErrorMessage">
+            {{ resetPasswordErrorMessage }}
+          </div>
+
+          <div class="feedback-message success" *ngIf="resetPasswordSuccessMessage">
+            {{ resetPasswordSuccessMessage }}
+          </div>
+
+          <div class="reset-manager-form">
+            <input
+              #managerPasswordResetInput
+              type="password"
+              placeholder="Nuova password manager"
+              [value]="newManagerResetPassword"
+              (input)="newManagerResetPassword = managerPasswordResetInput.value"
+            />
+
+            <button
+              type="button"
+              class="primary-btn"
+              [disabled]="isResettingManagerPassword"
+              (click)="submitResetManagerPassword(gym)">
+              {{ isResettingManagerPassword ? 'Salvataggio...' : 'Salva nuova password' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

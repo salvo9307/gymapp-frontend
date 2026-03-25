@@ -1,0 +1,396 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+}
+
+.hero-card {
+  background: #0f172a;
+  color: white;
+  border-radius: 24px;
+  padding: 28px 32px;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hero-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #cbd5e1;
+}
+
+.hero-card strong {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.section-count {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.gym-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.gym-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gym-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.gym-main-info h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #111827;
+}
+
+.gym-main-info p {
+  margin: 8px 0 0;
+  color: #6b7280;
+}
+
+.gym-top-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.subscription-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  min-width: 220px;
+}
+
+.subscription-status {
+  min-height: 22px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.subscription-ok {
+  color: #15803d;
+}
+
+.subscription-no {
+  color: #dc2626;
+}
+
+.renew-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.renew-select {
+  min-width: 110px;
+  height: 38px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 0 10px;
+  background: white;
+  color: #111827;
+  font-weight: 500;
+}
+
+.renew-btn {
+  height: 38px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  background: #0f172a;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.renew-btn:hover {
+  opacity: 0.9;
+}
+
+.gym-side-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-badge {
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.gym-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.manager-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 18px;
+  background: #f9fafb;
+}
+
+.manager-label {
+  display: inline-block;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.manager-box strong {
+  display: block;
+  font-size: 22px;
+  color: #111827;
+}
+
+.manager-box p {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+
+.gym-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  opacity: 0.92;
+}
+
+.primary-btn {
+  background: #0f172a;
+  color: white;
+}
+
+.secondary-btn {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.renew-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.create-gym-panel,
+.reset-manager-panel,
+.state-box {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.create-gym-panel h3,
+.reset-manager-panel h4 {
+  margin: 0 0 16px;
+}
+
+.create-gym-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.create-gym-form input,
+.reset-manager-form input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 0 14px;
+  outline: none;
+}
+
+.create-gym-actions {
+  margin-top: 16px;
+}
+
+.reset-manager-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.feedback-message {
+  margin-top: 14px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 500;
+}
+
+.feedback-message.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.feedback-message.success {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.state-box.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 1100px) {
+  .gym-list {
+    grid-template-columns: 1fr;
+  }
+
+  .gym-card-top {
+    flex-direction: column;
+  }
+
+  .gym-top-right {
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .create-gym-form {
+    grid-template-columns: 1fr;
+  }
+
+  .reset-manager-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gym-top-right {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .gym-side-info {
+    justify-content: flex-start;
+  }
+
+  .renew-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .renew-select,
+  .renew-btn {
+    width: 100%;
+  }
+
+  .subscription-box {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+  .status-badge.expiring {
+    background: #fef3c7;
+    color: #92400e;
+  }

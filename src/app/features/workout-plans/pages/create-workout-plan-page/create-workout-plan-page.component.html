@@ -1,0 +1,138 @@
+<div class="create-workout-page">
+  <div class="page-header">
+    <div>
+        <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
+        <h1>{{ isEditMode() ? 'Modifica scheda' : 'Crea scheda' }}</h1>
+        <p>
+        {{ isEditMode() ? 'Aggiorna la scheda attiva dell\'utente' : 'Costruisci una nuova scheda allenamento per l\'utente' }}
+        </p>
+    </div>
+   </div>
+
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento dati...
+  </div>
+
+  <div *ngIf="errorMessage()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <div *ngIf="successMessage()" class="state-box success">
+    {{ successMessage() }}
+  </div>
+
+  <div class="form-card">
+    <label class="field-label">Titolo scheda</label>
+    <input
+      type="text"
+      [(ngModel)]="title"
+      placeholder="Es. Scheda massa aprile"
+    />
+  </div>
+
+  <div class="days-section">
+    <div class="section-header">
+      <h2>Giornate</h2>
+      <button class="secondary-btn" (click)="addDay()">+ Aggiungi giornata</button>
+    </div>
+
+    <div class="day-card" *ngFor="let day of days; let dayIndex = index">
+      <div class="day-top">
+        <div class="day-title-wrap">
+            <span class="label">Giorno {{ day.dayOrder }}</span>
+            <input
+            type="text"
+            [(ngModel)]="day.title"
+            placeholder="Titolo giornata"
+            />
+        </div>
+
+        <button class="danger-btn small" (click)="removeDay(dayIndex)">
+            Elimina giornata
+        </button>
+      </div>
+      
+
+      <div class="exercise-toolbar">
+        <button class="ghost-btn small" (click)="addExercise(day)">+ Aggiungi esercizio</button>
+      </div>
+
+      <div class="exercise-table" *ngIf="day.exercises.length > 0; else noExercises">
+        <div class="exercise-row header">
+          <div>Esercizio</div>
+          <div>Serie</div>
+          <div>Ripetizioni</div>
+          <div>Azioni</div>
+        </div>
+
+        <div class="exercise-row" *ngFor="let exercise of day.exercises; let exIndex = index">
+          <div>
+            <select [(ngModel)]="exercise.exerciseId">
+              <option [ngValue]="null">Seleziona esercizio</option>
+              <option *ngFor="let availableExercise of exercises()" [ngValue]="availableExercise.id">
+                {{ availableExercise.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <input type="number" [(ngModel)]="exercise.sets" placeholder="Serie" />
+          </div>
+
+          <div>
+            <input type="text" [(ngModel)]="exercise.reps" placeholder="Es. 10 o 8-10" />
+          </div>
+
+          <div>
+            <button class="danger-btn small" (click)="removeExercise(day, exIndex)">Rimuovi</button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noExercises>
+        <div class="empty-day">
+          Nessun esercizio aggiunto.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+    <div class="page-header">
+        <div>
+                <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
+                <h1>{{ isEditMode() ? 'Modifica scheda' : 'Crea scheda' }}</h1>
+                <p>
+                {{ isEditMode() ? 'Aggiorna la scheda attiva dell\'utente' : 'Costruisci una nuova scheda allenamento per l\'utente' }}
+                </p>
+        </div>
+    </div>
+
+    <div class="feedback-message error" *ngIf="formErrorMessage()">
+        {{ formErrorMessage() }}
+      </div>
+
+      <div class="feedback-message error" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <div class="feedback-message success" *ngIf="successMessage()">
+        {{ successMessage() }}
+      </div>
+
+      <div class="page-actions">
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="goBack()">
+          Annulla
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="isSaving()"
+          (click)="saveWorkoutPlan()">
+          {{ isSaving() ? 'Salvataggio...' : (isEditMode() ? 'Salva modifiche' : 'Crea scheda') }}
+        </button>
+      </div>
+</div>

@@ -1,0 +1,179 @@
+<div class="users-page">
+  <div class="page-header">
+    <div>
+      <h1>Utenti</h1>
+      <p>Gestisci gli utenti della palestra</p>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="primary-btn"
+      (click)="toggleCreateUserPanel()">
+      {{ showCreateUserPanel() ? 'Chiudi pannello nuovo utente' : 'Nuovo utente' }}
+    </button>
+  </div>
+
+  <div class="create-user-panel" *ngIf="showCreateUserPanel()">
+    <h3>Nuovo utente</h3>
+
+    <div class="create-user-form">
+      <input
+        #firstNameInput
+        type="text"
+        placeholder="Nome"
+        [value]="newUserFirstName()"
+        (input)="onFirstNameChange(firstNameInput.value)"
+      />
+
+      <input
+        #lastNameInput
+        type="text"
+        placeholder="Cognome"
+        [value]="newUserLastName()"
+        (input)="onLastNameChange(lastNameInput.value)"
+      />
+
+      <input
+        #emailInput
+        type="email"
+        placeholder="Email"
+        [value]="newUserEmail()"
+        (input)="onEmailChange(emailInput.value)"
+      />
+
+      <input
+        #passwordInput
+        type="password"
+        placeholder="Password iniziale"
+        [value]="newUserPassword()"
+        (input)="onPasswordChange(passwordInput.value)"
+      />
+    </div>
+
+    <div class="feedback-message error" *ngIf="createUserErrorMessage()">
+      {{ createUserErrorMessage() }}
+    </div>
+
+    <div class="feedback-message success" *ngIf="createUserSuccessMessage()">
+      {{ createUserSuccessMessage() }}
+    </div>
+
+    <div class="create-user-actions">
+      <button
+        type="button"
+        class="primary-btn"
+        [disabled]="isCreatingUser()"
+        (click)="submitCreateUser()">
+        {{ isCreatingUser() ? 'Salvataggio...' : 'Crea utente' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="users-tabs">
+    <button
+      type="button"
+      class="tab-button"
+      [class.active]="selectedStatus() === 'ACTIVE'"
+      (click)="showActiveUsers()">
+      Attivi ({{ activeUsersCount() }})
+    </button>
+
+    <button
+      type="button"
+      class="tab-button"
+      [class.active]="selectedStatus() === 'INACTIVE'"
+      (click)="showInactiveUsers()">
+      Disattivi ({{ inactiveUsersCount() }})
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <input
+      #searchInput
+      type="text"
+      placeholder="Cerca per nome o email..."
+      (input)="onSearchChange(searchInput.value)"
+    />
+  </div>
+
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento utenti...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <div *ngIf="!isLoading() && !errorMessage()" class="table-card">
+    <table *ngIf="filteredUsers().length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Abbonamento</th>
+          <th>Scadenza</th>
+          <th>Scheda</th>
+          <th>Ultima scheda</th>
+          <th class="actions-col">Azioni</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let user of filteredUsers()">
+          <td>
+            <div class="user-name">
+              <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+            </div>
+          </td>
+
+          <td>{{ user.email }}</td>
+
+          <td>
+            <span
+              class="subscription-badge"
+              [ngClass]="getSubscriptionClass(user.subscriptionStatus)">
+              {{ getSubscriptionLabel(user.subscriptionStatus, user.subscriptionEndDate) }}
+            </span>
+          </td>
+
+          <td>
+            <span class="expiry-date" [class.muted]="!user.subscriptionEndDate">
+              {{ user.subscriptionEndDate ? formatDateForView(user.subscriptionEndDate) : '—' }}
+            </span>
+          </td>
+
+          <td>
+            <span
+              class="status-badge"
+              [class.active]="user.hasWorkoutPlan"
+              [class.inactive]="!user.hasWorkoutPlan">
+              {{ user.hasWorkoutPlan ? 'Presente' : 'Assente' }}
+            </span>
+          </td>
+
+          <td>
+            {{ user.latestWorkoutPlanTitle || 'Nessuna scheda' }}
+          </td>
+
+          <td class="actions-col">
+            <button type="button" (click)="openUserDetail(user.id)">
+              Dettaglio
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        {{
+          selectedStatus() === 'ACTIVE'
+            ? 'Nessun utente attivo trovato.'
+            : 'Nessun utente disattivo trovato.'
+        }}
+      </div>
+    </ng-template>
+  </div>
+</div>

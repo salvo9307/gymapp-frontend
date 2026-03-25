@@ -1,0 +1,96 @@
+<div class="exercises-page">
+  <div class="page-header">
+    <div>
+      <h1>Esercizi</h1>
+      <p>Gestisci il catalogo esercizi della palestra</p>
+    </div>
+  </div>
+
+  <div class="toolbar-card">
+    <div class="search-row">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Cerca esercizio..."
+        (keyup.enter)="searchExercises()"
+      />
+
+      <button class="secondary-btn" (click)="searchExercises()">Cerca</button>
+      <button class="ghost-btn" (click)="resetSearch()">Reset</button>
+    </div>
+
+    <div class="create-row">
+      <input
+        type="text"
+        [(ngModel)]="newExerciseName"
+        placeholder="Nuovo esercizio..."
+        (keyup.enter)="createExercise()"
+      />
+
+      <button class="primary-btn" (click)="createExercise()">Aggiungi esercizio</button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento esercizi...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <div *ngIf="successMessage() && !isLoading()" class="state-box success">
+    {{ successMessage() }}
+  </div>
+
+  <div *ngIf="!isLoading()" class="table-card">
+    <table *ngIf="exercises().length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome esercizio</th>
+          <th class="actions-col">Azioni</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let exercise of exercises()">
+
+          <td>
+            <ng-container *ngIf="editingExerciseId !== exercise.id; else editMode">
+              <strong>{{ exercise.name }}</strong>
+            </ng-container>
+
+            <ng-template #editMode>
+              <input
+                class="edit-input"
+                type="text"
+                [(ngModel)]="editingExerciseName"
+              />
+            </ng-template>
+          </td>
+
+          <td class="actions-col">
+            <div class="actions">
+              <ng-container *ngIf="editingExerciseId !== exercise.id; else editActions">
+                <button class="secondary-btn small" (click)="startEdit(exercise)">Modifica</button>
+                <button class="danger-btn small" (click)="deleteExercise(exercise)">Elimina</button>
+              </ng-container>
+
+              <ng-template #editActions>
+                <button class="primary-btn small" (click)="saveEdit(exercise.id)">Salva</button>
+                <button class="ghost-btn small" (click)="cancelEdit()">Annulla</button>
+              </ng-template>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        Nessun esercizio trovato.
+      </div>
+    </ng-template>
+  </div>
+</div>

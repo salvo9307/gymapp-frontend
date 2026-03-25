@@ -1,0 +1,52 @@
+<div class="app-login-page">
+  <div class="login-shell">
+    <div class="brand-block">
+      <div class="brand-badge">Gym App</div>
+      <h1>Accedi alla tua scheda</h1>
+      <p>
+        Consulta il tuo allenamento, aggiorna i pesi e porta la scheda sempre con te.
+      </p>
+    </div>
+
+    <div class="login-card">
+      <h2>Login</h2>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          #emailInput
+          id="email"
+          type="email"
+          placeholder="Inserisci la tua email"
+          [value]="email()"
+          (input)="onEmailChange(emailInput.value)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          #passwordInput
+          id="password"
+          type="password"
+          placeholder="Inserisci la tua password"
+          [value]="password()"
+          (input)="onPasswordChange(passwordInput.value)"
+          (keyup.enter)="submitLogin()"
+        />
+      </div>
+
+      <div class="error-box" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <button
+        type="button"
+        class="login-btn"
+        [disabled]="isLoading()"
+        (click)="submitLogin()">
+        {{ isLoading() ? 'Accesso...' : 'Entra' }}
+      </button>
+    </div>
+  </div>
+</div>

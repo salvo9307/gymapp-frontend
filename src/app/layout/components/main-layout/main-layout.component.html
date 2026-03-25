@@ -1,0 +1,39 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <h2>GymApp</h2>
+      <p>Gestionale palestra</p>
+    </div>
+
+    <nav class="menu">
+      <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard Admin</a>
+
+      <a *ngIf="isManager" routerLink="/manager/dashboard" routerLinkActive="active">
+        Dashboard Manager
+      </a>
+
+      <a *ngIf="isManager" routerLink="/manager/users" routerLinkActive="active">
+        Utenti
+      </a>
+
+      <a *ngIf="isManager" routerLink="/manager/exercises" routerLinkActive="active">
+        Esercizi
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div>
+        <strong>{{ userRole }}</strong>
+        <span *ngIf="userEmail"> · {{ userEmail }}</span>
+      </div>
+
+      <button (click)="logout()">Logout</button>
+    </header>
+
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

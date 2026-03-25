@@ -1,0 +1,80 @@
+<div class="wrapper">
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento scheda...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <ng-container *ngIf="workoutPlan() && !isLoading()">
+    <section class="hero">
+      <div>
+        <h1>{{ workoutPlan()!.title }}</h1>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" type="button" (click)="resetWeightsForCurrentDay()">
+          Reset pesi giorno
+        </button>
+
+        <div class="save-status">
+          {{ saveStatus() }}
+        </div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button
+        *ngFor="let day of workoutPlan()!.days; trackBy: trackDay"
+        type="button"
+        class="tab-btn"
+        [class.active]="selectedDay() === day.dayNumber"
+        (click)="showDay(day.dayNumber)">
+        Giorno {{ day.dayNumber }}
+      </button>
+    </div>
+
+    <section class="grid" *ngIf="currentDay() as day">
+      <article class="day-card active">
+        <div class="day-header">
+          <div class="badge">Giorno {{ day.dayNumber }}</div>
+          <h2>{{ day.title }}</h2>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Esercizio</th>
+                <th>Serie x Rep</th>
+                <th>Peso</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="row-box" *ngFor="let exercise of day.exercises; trackBy: trackExercise">
+                <td>{{ exercise.orderNumber }}</td>
+                <td>{{ exercise.exerciseName }}</td>
+                <td>{{ exercise.sets }} x {{ exercise.reps }}</td>
+                <td>
+                  <input
+                    type="number"
+                    placeholder="kg"
+                    [value]="exercise.weight ?? ''"
+                    (input)="onWeightChange(exercise, $any($event.target).value)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer-info">
+      I pesi vengono salvati automaticamente.
+    </div>
+  </ng-container>
+</div>

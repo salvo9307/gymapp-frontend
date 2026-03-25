@@ -1,0 +1,79 @@
+<div class="wrapper">
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento scheda...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <ng-container *ngIf="workoutPlan() && !isLoading()">
+    <section class="hero">
+      <div>
+        <h1>{{ workoutPlan()!.title }}</h1>
+        <div class="hero-subtitle">La tua scheda sempre a portata di mano</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" type="button" (click)="resetWeightsForCurrentDay()">
+          Reset pesi
+        </button>
+        <div class="save-status">{{ saveStatus() }}</div>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button
+        *ngFor="let day of workoutPlan()!.days; trackBy: trackDay"
+        type="button"
+        class="tab-btn"
+        [class.active]="selectedDay() === day.dayOrder"
+        (click)="showDay(day.dayOrder)">
+        Giorno {{ day.dayOrder }}
+      </button>
+    </div>
+
+    <section class="grid" *ngIf="currentDay() as day">
+      <article class="day-card">
+        <div class="day-header">
+          <div class="badge">Giorno {{ day.dayOrder }}</div>
+          <h2>{{ day.title }}</h2>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Esercizio</th>
+                <th>Serie x Rep</th>
+                <th>Peso</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="row-box" *ngFor="let exercise of day.exercises; trackBy: trackExercise">
+                <td>{{ exercise.exerciseOrder }}</td>
+                <td>{{ exercise.exerciseName }}</td>
+                <td>{{ exercise.sets ?? '-' }} x {{ exercise.reps || '-' }}</td>
+                <td>
+                  <input
+                    #weightInput
+                    type="number"
+                    placeholder="kg"
+                    [value]="exercise.lastWeight ?? ''"
+                    (change)="onWeightChange(exercise, weightInput.value)"
+                    />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer-info">
+      I pesi vengono salvati automaticamente mentre li aggiorni.
+    </div>
+  </ng-container>
+</div>

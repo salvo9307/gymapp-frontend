@@ -1,0 +1,60 @@
+<div class="workout-page">
+  <div class="page-header">
+    <div>
+      <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
+      <h1>Scheda allenamento</h1>
+      <p>Scheda attiva dell'utente selezionato</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento scheda...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <ng-container *ngIf="workoutPlan() && !isLoading()">
+    <div class="plan-card">
+      <span class="label">Titolo scheda</span>
+      <h2>{{ workoutPlan()!.title }}</h2>
+      <p>ID scheda: #{{ workoutPlan()!.id }}</p>
+    </div>
+
+    <div class="days-list">
+      <div class="day-card" *ngFor="let day of workoutPlan()!.days">
+        <div class="day-header">
+          <div>
+            <span class="label">Giorno {{ day.dayOrder }}</span>
+            <h3>{{ day.title }}</h3>
+          </div>
+        </div>
+
+        <div class="exercise-list" *ngIf="day.exercises.length > 0; else noExercises">
+          <div class="exercise-row" *ngFor="let exercise of day.exercises">
+            <div class="exercise-main">
+              <strong>{{ exercise.exerciseOrder }}. {{ exercise.exerciseName }}</strong>
+              <span>
+                {{ exercise.sets ?? '-' }} serie · {{ exercise.reps || '-' }} reps
+              </span>
+            </div>
+
+            <div class="exercise-weight">
+              <span>Ultimo peso</span>
+              <strong>
+                {{ exercise.lastWeight !== null ? (exercise.lastWeight + ' kg') : '—' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noExercises>
+          <div class="empty-day">
+            Nessun esercizio presente in questa giornata.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>

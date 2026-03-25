@@ -1,0 +1,151 @@
+.workout-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-header h1 {
+  margin: 10px 0 0;
+  font-size: 28px;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+}
+
+.back-button {
+  border: none;
+  background: transparent;
+  color: #374151;
+  padding: 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.plan-card,
+.day-card,
+.state-box {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+}
+
+.plan-card {
+  padding: 22px;
+}
+
+.plan-card h2 {
+  margin: 8px 0;
+  font-size: 28px;
+  color: #111827;
+}
+
+.plan-card p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+}
+
+.days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.day-card {
+  padding: 20px;
+}
+
+.day-header h3 {
+  margin: 6px 0 0;
+  font-size: 22px;
+  color: #111827;
+}
+
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.exercise-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.exercise-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exercise-main strong {
+  color: #111827;
+  font-size: 16px;
+}
+
+.exercise-main span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.exercise-weight {
+  min-width: 120px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exercise-weight span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.exercise-weight strong {
+  color: #111827;
+  font-size: 18px;
+}
+
+.empty-day {
+  margin-top: 18px;
+  color: #6b7280;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.state-box {
+  padding: 18px;
+}
+
+.state-box.error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+@media (max-width: 700px) {
+  .exercise-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exercise-weight {
+    min-width: auto;
+    text-align: left;
+  }
+}

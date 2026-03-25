@@ -1,0 +1,95 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Panoramica generale della palestra</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="state-box">
+    Caricamento dashboard...
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="state-box error">
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="dashboard && !isLoading">
+    <div class="gym-banner">
+      <div>
+        <span class="label">Palestra</span>
+        <h2>{{ dashboard.gymName }}</h2>
+      </div>
+
+      <div class="gym-id">
+        <span class="label">Gym ID</span>
+        <strong>#{{ dashboard.id }}</strong>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="stat-card">
+        <span class="label">Utenti totali</span>
+        <strong>{{ dashboard.totalUsers }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="label">Utenti con scheda attiva</span>
+        <strong>{{ dashboard.usersWithActivePlan }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="label">Utenti senza scheda</span>
+        <strong>{{ dashboard.usersWithoutActivePlan }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span class="label">Esercizi totali</span>
+        <strong>{{ dashboard.totalExercises }}</strong>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <div>
+          <span class="label">Abbonamenti</span>
+          <h3>Stato utenti</h3>
+        </div>
+      </div>
+
+      <div class="subscription-grid">
+        <div class="mini-stat-card success">
+          <span class="label">Abbonamenti attivi</span>
+          <strong>{{ dashboard.activeSubscriptionsCount ?? 0 }}</strong>
+        </div>
+
+        <div class="mini-stat-card warning">
+          <span class="label">In scadenza</span>
+          <strong>{{ dashboard.expiringUsersCount ?? 0 }}</strong>
+        </div>
+
+        <div class="mini-stat-card danger">
+          <span class="label">Scaduti</span>
+          <strong>{{ dashboard.expiredUsersCount ?? 0 }}</strong>
+        </div>
+      </div>
+
+      <div class="subscription-alerts">
+        <div *ngIf="hasExpiringUsers()" class="alert-box warning">
+          Hai {{ dashboard.expiringUsersCount }} {{ getExpiringUsersLabel() }} nei prossimi giorni.
+        </div>
+
+        <div *ngIf="hasExpiredUsers()" class="alert-box danger">
+          Hai {{ dashboard.expiredUsersCount }} {{ getExpiredUsersLabel() }} da rinnovare.
+        </div>
+
+        <div
+          *ngIf="!hasExpiringUsers() && !hasExpiredUsers()"
+          class="alert-box success"
+        >
+          Nessuna criticità sugli abbonamenti in questo momento.
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

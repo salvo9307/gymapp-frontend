@@ -1,0 +1,178 @@
+<div class="user-detail-page">
+  <div class="page-header">
+    <div>
+      <button class="back-button" (click)="goBack()">← Torna agli utenti</button>
+      <h1>Dettaglio utente</h1>
+      <p>Informazioni anagrafiche e stato scheda</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading()" class="state-box">
+    Caricamento dettaglio utente...
+  </div>
+
+  <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
+    {{ errorMessage() }}
+  </div>
+
+  <ng-container *ngIf="user() && !isLoading()">
+    <div class="detail-grid">
+      <div class="detail-card main-card">
+        <span class="label">Utente</span>
+        <h2>{{ user()!.firstName }} {{ user()!.lastName }}</h2>
+        <p>{{ user()!.email }}</p>
+      </div>
+
+      <div class="detail-card">
+        <span class="label">Gym ID</span>
+        <strong>#{{ user()!.gymId }}</strong>
+      </div>
+
+      <div class="detail-card">
+        <span class="label">Scheda</span>
+        <strong [class.ok]="user()!.hasWorkoutPlan" [class.no]="!user()!.hasWorkoutPlan">
+          {{ user()!.hasWorkoutPlan ? 'Presente' : 'Assente' }}
+        </strong>
+      </div>
+
+      <div class="detail-card">
+        <span class="label">Stato account</span>
+        <strong [class.ok]="user()!.active" [class.no]="!user()!.active">
+          {{ user()!.active ? 'Attivo' : 'Disattivo' }}
+        </strong>
+      </div>
+
+      <div class="detail-card full-width subscription-card">
+        <span class="label">Abbonamento</span>
+
+        <!-- STATO -->
+        <div class="subscription-status">
+
+          <!-- ATTIVO -->
+          <ng-container *ngIf="isSubscriptionActive(); else expiredBlock">
+            <strong class="ok">
+              Attivo fino al {{ user()!.subscriptionEndDate | date:'dd/MM/yyyy' }}
+            </strong>
+          </ng-container>
+
+          <!-- SCADUTO / NON PRESENTE -->
+          <ng-template #expiredBlock>
+            <strong class="no">
+              {{
+                user()!.subscriptionEndDate
+                  ? 'Abbonamento scaduto'
+                  : 'Nessun abbonamento'
+              }}
+            </strong>
+          </ng-template>
+
+        </div>
+
+        <!-- RINNOVO -->
+        <div class="renew-actions">
+
+          <!-- SELECT -->
+          <select #monthsSelect>
+            <option [value]="1">1 mese</option>
+            <option [value]="3">3 mesi</option>
+            <option [value]="6">6 mesi</option>
+            <option [value]="12">12 mesi</option>
+          </select>
+
+          <!-- LABEL DINAMICA -->
+          <button (click)="renew(+monthsSelect.value)">
+            {{
+              isSubscriptionActive()
+                ? 'Estendi abbonamento'
+                : 'Rinnova abbonamento'
+            }}
+          </button>
+
+        </div>
+      </div>
+
+      <div class="detail-card full-width">
+        <span class="label">Ultima scheda</span>
+        <strong>{{ user()!.latestWorkoutPlanTitle || 'Nessuna scheda disponibile' }}</strong>
+
+        <div class="plan-meta" *ngIf="user()!.latestWorkoutPlanId">
+          ID scheda: #{{ user()!.latestWorkoutPlanId }}
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-panel">
+      <button
+        class="primary-btn"
+        [disabled]="!user()!.latestWorkoutPlanId">
+        Apri scheda
+      </button>
+
+      <button
+        class="secondary-btn"
+        [disabled]="!user()!.latestWorkoutPlanId"
+        (click)="editWorkoutPlan()">
+        Modifica scheda
+      </button>
+
+      <button
+        class="secondary-btn"
+        [disabled]="!user()!.latestWorkoutPlanId"
+        (click)="duplicateWorkoutPlan()">
+        Duplica scheda
+      </button>
+
+      <button
+        class="secondary-btn"
+        (click)="createWorkoutPlan()">
+        Nuova scheda
+      </button>
+
+      <!--
+      <button
+        class="secondary-btn"
+        [disabled]="isUpdatingStatus()"
+        (click)="toggleUserStatus()">
+        {{ isUpdatingStatus()
+            ? 'Aggiornamento...'
+            : (user()!.active ? 'Disattiva utente' : 'Riattiva utente') }}
+      </button>
+-->
+      <button
+        class="secondary-btn"
+        type="button"
+        (click)="toggleResetPasswordForm()">
+        {{ showResetPasswordForm() ? 'Chiudi reset password' : 'Reset password' }}
+      </button>
+    </div>
+    <div class="feedback-message success" *ngIf="successMessage()">
+      {{ successMessage() }}
+    </div>
+
+    <div class="reset-password-panel" *ngIf="showResetPasswordForm()">
+      <h3>Reset password utente</h3>
+
+      <div class="feedback-message error" *ngIf="formErrorMessage()">
+        {{ formErrorMessage() }}
+      </div>
+
+      <div class="reset-password-form">
+          <input
+            #passwordInput
+            type="password"
+            placeholder="Inserisci nuova password"
+            [value]="newPassword()"
+            (input)="onNewPasswordChange(passwordInput.value)"
+          />
+
+          <button
+            class="primary-btn"
+            type="button"
+            [disabled]="isResettingPassword()"
+            (click)="submitResetPassword()">
+            {{ isResettingPassword() ? 'Salvataggio...' : 'Salva nuova password' }}
+          </button>
+        </div>
+    </div>
+  </ng-container>
+</div>
