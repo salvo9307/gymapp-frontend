@@ -1,6 +1,5 @@
 export interface AppWorkoutExerciseResponse {
   id: number;
-  exerciseId: number;
   exerciseName: string;
   exerciseOrder: number;
   sets: number | null;
