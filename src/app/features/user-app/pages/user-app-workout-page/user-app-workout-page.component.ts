@@ -1,6 +1,8 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AppWorkoutService } from '../../../../core/services/app-workout.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import {
   AppWorkoutDayResponse,
   AppWorkoutExerciseResponse,
@@ -16,6 +18,8 @@ import {
 })
 export class UserAppWorkoutPageComponent implements OnInit {
   private appWorkoutService = inject(AppWorkoutService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   workoutPlan = signal<AppWorkoutPlanResponse | null>(null);
   isLoading = signal(true);
@@ -54,6 +58,11 @@ export class UserAppWorkoutPageComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/app/login']);
   }
 
   showDay(dayOrder: number): void {
