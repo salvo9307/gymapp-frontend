@@ -62,7 +62,7 @@ export class LoginPageComponent implements OnInit {
         } else if (role === 'MANAGER') {
           this.router.navigate(['/manager/dashboard']);
         } else if (role === 'USER') {
-          this.router.navigate(['/user']);
+          this.router.navigate(['/app/workout']);
         } else {
           this.router.navigate(['/login']);
         }
