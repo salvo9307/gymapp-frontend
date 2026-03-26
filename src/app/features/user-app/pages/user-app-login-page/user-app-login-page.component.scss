@@ -3,6 +3,13 @@
   min-height: 100vh;
 }
 
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .app-login-page {
   min-height: 100vh;
   padding: 20px;
