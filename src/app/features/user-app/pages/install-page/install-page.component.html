@@ -1,0 +1,70 @@
+<div class="install-page">
+  <div class="install-card">
+    <div class="badge">GymApp</div>
+
+    <h1>Installa GymApp</h1>
+    <p class="subtitle">
+      Aggiungi l'app alla schermata iniziale in modo semplice e veloce.
+    </p>
+
+    <div *ngIf="isStandalone" class="success-box">
+      GymApp è già installata su questo dispositivo.
+    </div>
+
+    <div *ngIf="!isStandalone && isInAppBrowser" class="warning-box">
+      Hai aperto il link dentro un'app.
+      Per installare GymApp correttamente, aprilo in
+      <strong>{{ isIos ? 'Safari' : 'Chrome' }}</strong>.
+    </div>
+
+    <div *ngIf="!isStandalone && isAndroid" class="platform-box">
+      <h2>Android</h2>
+
+      <ng-container *ngIf="canInstall; else androidManual">
+        <p>Premi il pulsante qui sotto per installare GymApp.</p>
+
+        <button class="install-btn" (click)="installApp()">
+          Installa GymApp
+        </button>
+      </ng-container>
+
+      <ng-template #androidManual>
+        <p>
+          Il pulsante automatico non è disponibile in questo momento.
+          Apri la pagina in <strong>Chrome</strong> e usa il menu del browser.
+        </p>
+
+        <ol>
+          <li>Apri questa pagina in Chrome</li>
+          <li>Tocca il menu in alto a destra</li>
+          <li>Premi <strong>Installa app</strong> oppure <strong>Aggiungi a schermata Home</strong></li>
+        </ol>
+      </ng-template>
+    </div>
+
+    <div *ngIf="!isStandalone && isIos" class="platform-box">
+      <h2>iPhone</h2>
+
+      <p>Su iPhone l'installazione si fa da Safari in questo modo:</p>
+
+      <ol>
+        <li>Apri questa pagina in <strong>Safari</strong></li>
+        <li>Tocca il pulsante <strong>Condividi</strong></li>
+        <li>Scorri e premi <strong>Aggiungi a Home</strong></li>
+      </ol>
+
+      <div class="ios-hint">
+        Su iPhone non esiste il pulsante automatico come su Android.
+      </div>
+    </div>
+
+    <div *ngIf="!isAndroid && !isIos && !isStandalone" class="platform-box">
+      <h2>Apri dal telefono</h2>
+      <p>
+        Per installare GymApp, apri questa pagina dal tuo smartphone.
+      </p>
+    </div>
+
+    <a routerLink="/app/login" class="back-link">Vai al login utente</a>
+  </div>
+</div>

@@ -1,0 +1,132 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.install-page {
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(239, 68, 68, 0.10), transparent 28%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.install-card {
+  width: 100%;
+  max-width: 560px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  line-height: 1.1;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 0 0 24px;
+  color: #475569;
+  font-size: 16px;
+}
+
+.platform-box,
+.warning-box,
+.success-box {
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.platform-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.warning-box {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+}
+
+.success-box {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  color: #0f172a;
+}
+
+p {
+  margin: 0 0 12px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #334155;
+}
+
+li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.install-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 15px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb 0%, #dc2626 100%);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+}
+
+.install-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ios-hint {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 14px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}

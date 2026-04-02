@@ -19,6 +19,13 @@ export const routes: Routes = [
       )
   },
   {
+    path: 'install',
+    loadComponent: () =>
+      import('./features/user-app/pages/install-page/install-page.component').then(
+        m => m.InstallPageComponent
+      )
+  },
+  {
     path: 'app/workout',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['USER'] },

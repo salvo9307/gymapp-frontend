@@ -1,5 +1,5 @@
 {
-  "id": "/app/login",
+  "id": "/",
   "name": "GymApp",
   "short_name": "GymApp",
   "description": "Scheda allenamento sempre con te",
@@ -24,7 +24,7 @@
       "src": "/icons/icon-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "maskable any"
     }
   ]
 }
