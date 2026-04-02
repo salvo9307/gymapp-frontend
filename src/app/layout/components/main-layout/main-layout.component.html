@@ -6,7 +6,9 @@
     </div>
 
     <nav class="menu">
-      <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="active">Dashboard Admin</a>
+      <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="active">
+        Dashboard Admin
+      </a>
 
       <a *ngIf="isManager" routerLink="/manager/dashboard" routerLinkActive="active">
         Dashboard Manager
@@ -20,18 +22,13 @@
         Esercizi
       </a>
     </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
   </aside>
 
   <div class="main-area">
-    <header class="topbar">
-      <div>
-        <strong>{{ userRole }}</strong>
-        <span *ngIf="userEmail"> · {{ userEmail }}</span>
-      </div>
-
-      <button (click)="logout()">Logout</button>
-    </header>
-
     <main class="page-content">
       <router-outlet></router-outlet>
     </main>

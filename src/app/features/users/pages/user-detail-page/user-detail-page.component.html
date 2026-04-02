@@ -24,11 +24,6 @@
       </div>
 
       <div class="detail-card">
-        <span class="label">Gym ID</span>
-        <strong>#{{ user()!.gymId }}</strong>
-      </div>
-
-      <div class="detail-card">
         <span class="label">Scheda</span>
         <strong [class.ok]="user()!.hasWorkoutPlan" [class.no]="!user()!.hasWorkoutPlan">
           {{ user()!.hasWorkoutPlan ? 'Presente' : 'Assente' }}

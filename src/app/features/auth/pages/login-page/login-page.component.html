@@ -1,6 +1,6 @@
 <div class="login-container">
   <div class="login-card">
-    <h1>Gym App</h1>
+    <h1>GymApp</h1>
     <p>Accedi al gestionale</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -24,7 +24,7 @@
         {{ sessionMessage }}
       </div>
 
-      <div *ngIf="errorMessage" class="error">
+      <div *ngIf="errorMessage" class="state-box error">
         {{ errorMessage }}
       </div>
 
