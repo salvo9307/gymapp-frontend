@@ -6,6 +6,10 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
+  if (tokenService.getMustChangePassword()) {
+    return router.createUrlTree(['/change-password']);
+  }
+
   const expectedRoles = route.data['roles'] as string[];
   const currentRole = tokenService.getUserRole();
 

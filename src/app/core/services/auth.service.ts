@@ -5,6 +5,12 @@ import { LoginRequest, LoginResponse, JwtPayload } from '../models/auth.models';
 import { TokenService } from './token.service';
 import { environment } from '../../../enviroments/environment';
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +28,15 @@ export class AuthService {
         }
 
         this.tokenService.setToken(response.token);
+        this.tokenService.setMustChangePassword(response.mustChangePassword);
+      })
+    );
+  }
+
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/change-password`, request).pipe(
+      tap(() => {
+        this.tokenService.setMustChangePassword(false);
       })
     );
   }
@@ -45,6 +60,10 @@ export class AuthService {
   getCurrentRole(): 'ADMIN' | 'MANAGER' | 'USER' | null {
     const role = this.tokenService.getUserRole();
     return role === 'ADMIN' || role === 'MANAGER' || role === 'USER' ? role : null;
+  }
+
+  mustChangePassword(): boolean {
+    return this.tokenService.getMustChangePassword();
   }
 
   isUser(): boolean {

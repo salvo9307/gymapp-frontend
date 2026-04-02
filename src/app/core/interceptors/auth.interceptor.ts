@@ -8,8 +8,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
-  // Non aggiungere il token alle chiamate pubbliche di autenticazione
-  if (req.url.includes('/api/auth/')) {
+  const isPublicAuthCall = req.url.includes('/api/auth/login');
+
+  if (isPublicAuthCall) {
     return next(req);
   }
 

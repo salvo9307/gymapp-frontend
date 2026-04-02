@@ -7,6 +7,7 @@ import { JwtPayload } from '../models/auth.models';
 })
 export class TokenService {
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly MUST_CHANGE_PASSWORD_KEY = 'must_change_password';
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
@@ -38,6 +39,23 @@ export class TokenService {
   clearToken(): void {
     if (this.isBrowser()) {
       localStorage.removeItem(this.TOKEN_KEY);
+    }
+  }
+
+  setMustChangePassword(value: boolean): void {
+    if (this.isBrowser()) {
+      localStorage.setItem(this.MUST_CHANGE_PASSWORD_KEY, String(value));
+    }
+  }
+
+  getMustChangePassword(): boolean {
+    if (!this.isBrowser()) return false;
+    return localStorage.getItem(this.MUST_CHANGE_PASSWORD_KEY) === 'true';
+  }
+
+  clearMustChangePassword(): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem(this.MUST_CHANGE_PASSWORD_KEY);
     }
   }
 
@@ -79,5 +97,6 @@ export class TokenService {
 
   logout(): void {
     this.clearToken();
+    this.clearMustChangePassword();
   }
 }

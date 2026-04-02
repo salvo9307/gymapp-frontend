@@ -4,12 +4,16 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
+  token: string | null;
+  role: 'ADMIN' | 'MANAGER' | 'USER';
+  userId: number;
+  mustChangePassword: boolean;
 }
 
 export interface JwtPayload {
   sub: string;
-  userId: number;
   role: 'ADMIN' | 'MANAGER' | 'USER';
+  userId: number;
   exp: number;
+  iat: number;
 }

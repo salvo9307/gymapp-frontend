@@ -96,15 +96,13 @@ export const routes: Routes = [
           )
       },
       {
-        path: 'manager/exercises',
-        canActivate: [roleGuard],
-        data: { roles: ['MANAGER', 'ADMIN'] },
+        path: 'change-password',
+        canActivate: [authGuard],
         loadComponent: () =>
-          import('./features/exercises/pages/exercise-list-page/exercise-list-page.component').then(
-            m => m.ExerciseListPageComponent
+          import('./features/auth/pages/change-password-page/change-password-page.component').then(
+            m => m.ChangePasswordPageComponent
           )
       },
-
       {
         path: '',
         redirectTo: 'manager/dashboard',

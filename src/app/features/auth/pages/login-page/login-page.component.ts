@@ -35,6 +35,8 @@ export class LoginPageComponent implements OnInit {
       this.sessionMessage = 'Sessione scaduta. Effettua di nuovo il login.';
     } else if (reason === 'disabled') {
       this.sessionMessage = 'Il tuo account o la tua palestra è stata disattivata.';
+    } else if (reason === 'must-change-password') {
+      this.sessionMessage = 'Devi cambiare la password prima di continuare.';
     } else {
       this.sessionMessage = '';
     }
@@ -54,7 +56,12 @@ export class LoginPageComponent implements OnInit {
       email: this.loginForm.value.email!,
       password: this.loginForm.value.password!
     }).subscribe({
-      next: () => {
+      next: response => {
+        if (response.mustChangePassword) {
+          this.router.navigate(['/change-password']);
+          return;
+        }
+
         const role = this.tokenService.getUserRole();
 
         if (role === 'ADMIN') {
