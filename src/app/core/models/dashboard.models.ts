@@ -8,4 +8,5 @@ export interface ManagerDashboardResponse {
   activeSubscriptionsCount?: number;
   expiringUsersCount?: number;
   expiredUsersCount?: number;
+  subscriptionEndDate?: string | null;
 }

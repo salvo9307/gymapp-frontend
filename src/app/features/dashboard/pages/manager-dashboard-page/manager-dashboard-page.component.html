@@ -80,11 +80,28 @@
 
         <div
           *ngIf="!hasExpiringUsers() && !hasExpiredUsers()"
-          class="alert-box success"
-        >
+          class="alert-box success">
           Nessuna criticità sugli abbonamenti in questo momento.
         </div>
       </div>
     </div>
   </ng-container>
+
+  <div class="modal-backdrop" *ngIf="showSubscriptionPopup" (click)="closeSubscriptionPopup()">
+    <div class="subscription-popup" (click)="$event.stopPropagation()">
+      <h3>Avviso abbonamento palestra</h3>
+
+      <p>{{ getGymSubscriptionWarningMessage() }}</p>
+
+      <p *ngIf="dashboard?.subscriptionEndDate" class="subscription-date">
+        Scadenza: {{ dashboard?.subscriptionEndDate | date:'dd/MM/yyyy' }}
+      </p>
+
+      <div class="popup-actions">
+        <button class="popup-btn" type="button" (click)="closeSubscriptionPopup()">
+          Ho capito
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
