@@ -9,7 +9,7 @@ import { CreateManagedUserRequest, UserSummaryResponse } from '../../../../core/
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-list-page.component.html',
-  styleUrl: './user-list-page.component.scss'
+  styleUrls: ['./user-list-page.component.scss']
 })
 export class UserListPageComponent implements OnInit {
   private userService = inject(UserService);
@@ -31,34 +31,31 @@ export class UserListPageComponent implements OnInit {
   newUserPassword = signal('');
 
   filteredUsers = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
-    const allUsers = this.users();
+    const term = this.normalizeText(this.searchTerm());
     const showActive = this.selectedStatus() === 'ACTIVE';
 
-    return allUsers.filter(user => {
-      const isUserActive = this.isUserActiveBySubscription(user.subscriptionStatus);
-      const matchesStatus = showActive ? isUserActive : !isUserActive;
+    return this.users().filter(user => {
+      const matchesStatus = showActive ? !!user.active : !user.active;
 
-      const matchesSearch =
-        !term ||
-        `${user.firstName} ${user.lastName}`.toLowerCase().includes(term) ||
-        user.email.toLowerCase().includes(term) ||
-        String(user.gymId).includes(term) ||
-        (user.latestWorkoutPlanTitle ?? '').toLowerCase().includes(term) ||
-        this.getSubscriptionLabel(user.subscriptionStatus, user.subscriptionEndDate)
-          .toLowerCase()
-          .includes(term);
+      if (!matchesStatus) {
+        return false;
+      }
 
-      return matchesStatus && matchesSearch;
+      if (!term) {
+        return true;
+      }
+
+      const searchableText = this.buildSearchableText(user);
+      return searchableText.includes(term);
     });
   });
 
   activeUsersCount = computed(() =>
-    this.users().filter(user => this.isUserActiveBySubscription(user.subscriptionStatus)).length
+    this.users().filter(user => !!user.active).length
   );
 
   inactiveUsersCount = computed(() =>
-    this.users().filter(user => !this.isUserActiveBySubscription(user.subscriptionStatus)).length
+    this.users().filter(user => !user.active).length
   );
 
   ngOnInit(): void {
@@ -71,7 +68,7 @@ export class UserListPageComponent implements OnInit {
 
     this.userService.getUsersForManagement().subscribe({
       next: response => {
-        this.users.set(response);
+        this.users.set(response ?? []);
         this.isLoading.set(false);
       },
       error: err => {
@@ -84,6 +81,14 @@ export class UserListPageComponent implements OnInit {
 
   onSearchChange(value: string): void {
     this.searchTerm.set(value);
+  }
+
+  performSearch(value: string): void {
+    this.searchTerm.set(value);
+  }
+
+  clearSearch(): void {
+    this.searchTerm.set('');
   }
 
   showActiveUsers(): void {
@@ -131,12 +136,6 @@ export class UserListPageComponent implements OnInit {
     this.newUserPassword.set(value);
   }
 
-  private isUserActiveBySubscription(
-    status?: 'ACTIVE' | 'EXPIRING' | 'EXPIRED' | 'NONE'
-  ): boolean {
-    return status === 'ACTIVE' || status === 'EXPIRING';
-  }
-
   getSubscriptionLabel(
     status?: 'ACTIVE' | 'EXPIRING' | 'EXPIRED' | 'NONE',
     endDate?: string | null
@@ -144,13 +143,10 @@ export class UserListPageComponent implements OnInit {
     switch (status) {
       case 'ACTIVE':
         return 'Attivo';
-
       case 'EXPIRING':
         return 'In scadenza';
-
       case 'EXPIRED':
         return 'Scaduto';
-
       case 'NONE':
       default:
         return 'Nessun abbonamento';
@@ -163,10 +159,8 @@ export class UserListPageComponent implements OnInit {
     switch (status) {
       case 'ACTIVE':
         return 'subscription-active';
-
       case 'EXPIRING':
         return 'subscription-expiring';
-
       case 'EXPIRED':
       case 'NONE':
       default:
@@ -227,5 +221,24 @@ export class UserListPageComponent implements OnInit {
 
   formatDateForView(date: string): string {
     return new Date(date).toLocaleDateString('it-IT');
+  }
+
+  private buildSearchableText(user: UserSummaryResponse): string {
+    return this.normalizeText([
+      user.firstName,
+      user.lastName,
+      `${user.firstName ?? ''} ${user.lastName ?? ''}`,
+      user.email,
+      user.latestWorkoutPlanTitle,
+      this.getSubscriptionLabel(user.subscriptionStatus, user.subscriptionEndDate)
+    ].join(' '));
+  }
+
+  private normalizeText(value: string | null | undefined): string {
+    return (value ?? '')
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ');
   }
 }

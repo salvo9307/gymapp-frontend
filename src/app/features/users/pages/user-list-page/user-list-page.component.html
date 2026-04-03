@@ -90,12 +90,15 @@
   </div>
 
   <div class="toolbar">
-    <input
-      #searchInput
-      type="text"
-      placeholder="Cerca per nome o email..."
-      (input)="onSearchChange(searchInput.value)"
-    />
+    <div class="search-box">
+      <input
+        #searchInput
+        type="text"
+        placeholder="Cerca per nome o email..."
+        [value]="searchTerm()"
+        (input)="onSearchChange(searchInput.value)"
+      />
+    </div>
   </div>
 
   <div *ngIf="isLoading()" class="state-box">

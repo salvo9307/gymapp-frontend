@@ -242,3 +242,52 @@ tbody tr:hover {
   color: #9ca3af;
   font-weight: 500;
 }
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-btn {
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
+  border: none;
+  background: #0f172a;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-btn:hover {
+  opacity: 0.9;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box input {
+  flex: 1;
+}
+
+.search-btn,
+.clear-search-btn {
+  height: 40px;
+  min-width: 40px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.search-btn {
+  background: #0f172a;
+  color: white;
+}
+
+.clear-search-btn {
+  background: #e5e7eb;
+  color: #111827;
+}
