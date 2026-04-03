@@ -17,7 +17,7 @@
       <div class="actions">
         <button class="btn-primary" type="button" (click)="resetWeightsForCurrentDay()">
           Reset pesi
-        </button>        
+        </button>
         <button type="button" class="logout-btn" (click)="logout()">Logout</button>
         <div class="save-status">{{ saveStatus() }}</div>
       </div>
@@ -64,7 +64,7 @@
                     placeholder="kg"
                     [value]="exercise.lastWeight ?? ''"
                     (change)="onWeightChange(exercise, weightInput.value)"
-                    />
+                  />
                 </td>
               </tr>
             </tbody>
@@ -77,4 +77,22 @@
       I pesi vengono salvati automaticamente mentre li aggiorni.
     </div>
   </ng-container>
+
+  <div class="modal-backdrop" *ngIf="showSubscriptionPopup()" (click)="closeSubscriptionPopup()">
+    <div class="subscription-popup" (click)="$event.stopPropagation()">
+      <h3>Avviso abbonamento</h3>
+
+      <p>{{ subscriptionWarningMessage() }}</p>
+
+      <p *ngIf="workoutPlan()?.subscriptionEndDate" class="subscription-date">
+        Scadenza: {{ workoutPlan()?.subscriptionEndDate | date:'dd/MM/yyyy' }}
+      </p>
+
+      <div class="popup-actions">
+        <button class="btn-primary" type="button" (click)="closeSubscriptionPopup()">
+          Ho capito
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

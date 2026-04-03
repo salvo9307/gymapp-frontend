@@ -379,3 +379,45 @@ input[type='number']:focus {
   cursor: pointer;
   font-weight: 600;
 }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.subscription-popup {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #111827;
+}
+
+.subscription-popup h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.subscription-popup p {
+  margin: 0;
+}
+
+.subscription-date {
+  color: #6b7280;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+}

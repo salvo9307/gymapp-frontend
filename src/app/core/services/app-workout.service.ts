@@ -27,6 +27,7 @@ interface ApiWorkoutPlanResponse {
   id: number;
   title: string;
   days: ApiWorkoutDayResponse[];
+  subscriptionEndDate?: string | null;
 }
 
 @Injectable({
@@ -55,6 +56,7 @@ export class AppWorkoutService {
     return {
       id: response.id,
       title: response.title,
+      subscriptionEndDate: response.subscriptionEndDate ?? null,
       days: response.days.map(day => ({
         id: day.id,
         dayOrder: day.dayOrder,

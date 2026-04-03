@@ -18,6 +18,7 @@ export interface AppWorkoutPlanResponse {
   id: number;
   title: string;
   days: AppWorkoutDayResponse[];
+  subscriptionEndDate?: string | null;
 }
 
 export interface AppUpdateWeightRequest {
