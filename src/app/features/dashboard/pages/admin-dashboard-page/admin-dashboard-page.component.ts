@@ -11,17 +11,15 @@ import {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './admin-dashboard-page.component.html',
-  styleUrl: './admin-dashboard-page.component.scss'
+  styleUrls: ['./admin-dashboard-page.component.scss']
 })
 export class AdminDashboardPageComponent implements OnInit {
   private adminDashboardService = inject(AdminDashboardService);
 
-  // ====== STATE ======
   dashboard: AdminDashboardResponse | null = null;
   isLoading = true;
   errorMessage = '';
 
-  // ====== CREATE GYM ======
   showCreateGymPanel = false;
   isCreatingGym = false;
   createGymErrorMessage = '';
@@ -34,23 +32,26 @@ export class AdminDashboardPageComponent implements OnInit {
   newManagerEmail = '';
   newManagerPassword = '';
 
-  // ====== ACTIONS ======
   updatingGymId: number | null = null;
 
-  // ====== RESET PASSWORD ======
   openResetPasswordGymId: number | null = null;
   newManagerResetPassword = '';
   resetPasswordErrorMessage = '';
   resetPasswordSuccessMessage = '';
   isResettingManagerPassword = false;
 
+  showRenewModal = false;
+  renewGymId: number | null = null;
+  renewGymName = '';
+  selectedRenewMonths = 1;
+  selectedRenewStartDate = '';
+  renewErrorMessage = '';
+  isRenewingGym = false;
+
   ngOnInit(): void {
     this.loadDashboard();
   }
 
-  // =========================
-  // LOAD
-  // =========================
   loadDashboard(): void {
     this.isLoading = true;
     this.errorMessage = '';
@@ -68,9 +69,6 @@ export class AdminDashboardPageComponent implements OnInit {
     });
   }
 
-  // =========================
-  // CREATE GYM
-  // =========================
   toggleCreateGymPanel(): void {
     this.showCreateGymPanel = !this.showCreateGymPanel;
     this.createGymErrorMessage = '';
@@ -131,9 +129,6 @@ export class AdminDashboardPageComponent implements OnInit {
     });
   }
 
-  // =========================
-  // TOGGLE GYM
-  // =========================
   toggleGymStatus(gym: AdminDashboardGymResponse): void {
     if (this.updatingGymId !== null) return;
 
@@ -161,22 +156,59 @@ export class AdminDashboardPageComponent implements OnInit {
     });
   }
 
-  // =========================
-  // RENEW SUBSCRIPTION
-  // =========================
-  renewGym(gymId: number, months: number): void {
-    this.adminDashboardService.renewGymSubscription(gymId, months).subscribe({
-      next: () => this.loadDashboard(),
+  openRenewGymModal(gym: AdminDashboardGymResponse, months: number): void {
+    this.renewErrorMessage = '';
+    this.renewGymId = gym.id;
+    this.renewGymName = gym.name;
+    this.selectedRenewMonths = months;
+    this.selectedRenewStartDate = this.getTodayDateString();
+    this.showRenewModal = true;
+  }
+
+  closeRenewGymModal(): void {
+    if (this.isRenewingGym) return;
+
+    this.showRenewModal = false;
+    this.renewGymId = null;
+    this.renewGymName = '';
+    this.selectedRenewMonths = 1;
+    this.selectedRenewStartDate = '';
+    this.renewErrorMessage = '';
+  }
+
+  confirmRenewGym(): void {
+    if (!this.renewGymId) return;
+
+    if (!this.selectedRenewStartDate) {
+      this.renewErrorMessage = 'Seleziona una data di inizio';
+      return;
+    }
+
+    if (!this.selectedRenewMonths || this.selectedRenewMonths <= 0) {
+      this.renewErrorMessage = 'Seleziona una durata valida';
+      return;
+    }
+
+    this.isRenewingGym = true;
+    this.renewErrorMessage = '';
+
+    this.adminDashboardService.renewGymSubscription(this.renewGymId, {
+      months: this.selectedRenewMonths,
+      startDate: this.selectedRenewStartDate
+    }).subscribe({
+      next: () => {
+        this.isRenewingGym = false;
+        this.closeRenewGymModal();
+        this.loadDashboard();
+      },
       error: err => {
         console.error(err);
-        alert('Errore rinnovo palestra');
+        this.isRenewingGym = false;
+        this.renewErrorMessage = err?.error?.message || 'Errore rinnovo palestra';
       }
     });
   }
 
-  // =========================
-  // RESET PASSWORD
-  // =========================
   toggleResetManagerPasswordPanel(gymId: number): void {
     this.openResetPasswordGymId =
       this.openResetPasswordGymId === gymId ? null : gymId;
@@ -251,7 +283,7 @@ export class AdminDashboardPageComponent implements OnInit {
     return 'Attiva';
   }
 
-getGymStatusClass(gym: AdminDashboardGymResponse): string {
+  getGymStatusClass(gym: AdminDashboardGymResponse): string {
     if (!gym.subscriptionEndDate) {
       return 'inactive';
     }
@@ -265,5 +297,27 @@ getGymStatusClass(gym: AdminDashboardGymResponse): string {
     }
 
     return 'active';
+  }
+
+  getRenewPreviewEndDate(): string {
+    if (!this.selectedRenewStartDate || !this.selectedRenewMonths) {
+      return '';
+    }
+
+    const date = new Date(this.selectedRenewStartDate);
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
+
+    date.setMonth(date.getMonth() + this.selectedRenewMonths);
+    return new Intl.DateTimeFormat('it-IT').format(date);
+  }
+
+  private getTodayDateString(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

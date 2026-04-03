@@ -145,7 +145,7 @@
                 <button
                   type="button"
                   class="renew-btn"
-                  (click)="renewGym(gym.id, +monthsSelect.value)">
+                  (click)="openRenewGymModal(gym, +monthsSelect.value)">
                   {{ gym.active ? 'Estendi' : 'Rinnova' }}
                 </button>
               </div>
@@ -236,4 +236,68 @@
       </div>
     </div>
   </ng-container>
+
+  <div class="modal-backdrop" *ngIf="showRenewModal" (click)="closeRenewGymModal()">
+    <div class="renew-modal" (click)="$event.stopPropagation()">
+      <div class="renew-modal-header">
+        <h3>Rinnovo abbonamento palestra</h3>
+        <button class="modal-close-btn" type="button" (click)="closeRenewGymModal()">×</button>
+      </div>
+
+      <p class="renew-modal-text" *ngIf="renewGymName">
+        {{ renewGymName }}
+      </p>
+
+      <div class="renew-form">
+        <label>
+          <span>Durata</span>
+          <select
+            #renewMonthsSelect
+            [value]="selectedRenewMonths"
+            (change)="selectedRenewMonths = +renewMonthsSelect.value">
+            <option [value]="1">1 mese</option>
+            <option [value]="3">3 mesi</option>
+            <option [value]="6">6 mesi</option>
+            <option [value]="12">12 mesi</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Data inizio</span>
+          <input
+            #renewStartDateInput
+            type="date"
+            [value]="selectedRenewStartDate"
+            (input)="selectedRenewStartDate = renewStartDateInput.value" />
+        </label>
+      </div>
+
+      <div class="renew-preview" *ngIf="getRenewPreviewEndDate()">
+        Scadenza prevista:
+        <strong>{{ getRenewPreviewEndDate() }}</strong>
+      </div>
+
+      <div class="feedback-message error" *ngIf="renewErrorMessage">
+        {{ renewErrorMessage }}
+      </div>
+
+      <div class="renew-modal-actions">
+        <button
+          type="button"
+          class="secondary-btn"
+          [disabled]="isRenewingGym"
+          (click)="closeRenewGymModal()">
+          Annulla
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="isRenewingGym"
+          (click)="confirmRenewGym()">
+          {{ isRenewingGym ? 'Salvataggio...' : 'Conferma' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

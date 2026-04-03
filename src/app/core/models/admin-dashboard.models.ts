@@ -21,3 +21,8 @@ export interface AdminDashboardResponse {
   totalExercises: number;
   gyms: AdminDashboardGymResponse[];
 }
+
+export interface RenewGymSubscriptionRequest {
+  months: number;
+  startDate: string;
+}

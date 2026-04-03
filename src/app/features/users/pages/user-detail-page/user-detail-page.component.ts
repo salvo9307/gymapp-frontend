@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
@@ -10,7 +10,7 @@ import { UserDetailResponse } from '../../../../core/models/user.models';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './user-detail-page.component.html',
-  styleUrl: './user-detail-page.component.scss'
+  styleUrls: ['./user-detail-page.component.scss']
 })
 export class UserDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -28,6 +28,28 @@ export class UserDetailPageComponent implements OnInit {
   isResettingPassword = signal(false);
   successMessage = signal('');
   formErrorMessage = signal('');
+
+  showRenewModal = signal(false);
+  selectedMonths = signal(1);
+  selectedStartDate = signal('');
+  isRenewingSubscription = signal(false);
+
+  previewEndDate = computed(() => {
+    const startDate = this.selectedStartDate();
+    const months = this.selectedMonths();
+
+    if (!startDate || !months) {
+      return null;
+    }
+
+    const date = new Date(startDate);
+    if (Number.isNaN(date.getTime())) {
+      return null;
+    }
+
+    date.setMonth(date.getMonth() + months);
+    return date;
+  });
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -118,9 +140,7 @@ export class UserDetailPageComponent implements OnInit {
 
     this.userService.updateUserStatus(userId, { active: newStatus }).subscribe({
       next: () => {
-        this.user.update(user =>
-          user ? { ...user, active: newStatus } : user
-        );
+        this.user.update(user => (user ? { ...user, active: newStatus } : user));
         this.isUpdatingStatus.set(false);
       },
       error: err => {
@@ -167,7 +187,6 @@ export class UserDetailPageComponent implements OnInit {
     if (this.isResettingPassword()) {
       return;
     }
-    
 
     this.isResettingPassword.set(true);
 
@@ -190,35 +209,109 @@ export class UserDetailPageComponent implements OnInit {
   }
 
   isSubscriptionActive(): boolean {
-    const user = this.user();
-    if (!user?.subscriptionEndDate) return false;
+    const currentUser = this.user();
+    if (!currentUser?.subscriptionEndDate) return false;
 
-    const endDate = new Date(user.subscriptionEndDate);
+    const endDate = new Date(currentUser.subscriptionEndDate);
     const today = new Date();
 
-    // tolleranza 2 giorni
+    today.setHours(0, 0, 0, 0);
     today.setDate(today.getDate() - 2);
 
     return endDate >= today;
   }
 
-  renew(months: number): void {
+  openRenewModal(months: number): void {
+    this.successMessage.set('');
+    this.formErrorMessage.set('');
+    this.selectedMonths.set(months);
+    this.selectedStartDate.set(this.getTodayDateString());
+    this.showRenewModal.set(true);
+  }
+
+  closeRenewModal(): void {
+    if (this.isRenewingSubscription()) {
+      return;
+    }
+
+    this.showRenewModal.set(false);
+    this.selectedMonths.set(1);
+    this.selectedStartDate.set('');
+    this.formErrorMessage.set('');
+  }
+
+  onRenewMonthsChange(value: string): void {
+    this.selectedMonths.set(Number(value));
+  }
+
+  onRenewStartDateChange(value: string): void {
+    this.selectedStartDate.set(value);
+  }
+
+  confirmRenewSubscription(): void {
     const currentUser = this.user();
     const userId = currentUser?.id;
+    const months = this.selectedMonths();
+    const startDate = this.selectedStartDate();
 
-    if (!userId) return;
+    this.successMessage.set('');
+    this.formErrorMessage.set('');
 
-    this.userService.renewSubscription(userId, months).subscribe({
+    if (!userId) {
+      return;
+    }
+
+    if (!startDate) {
+      this.formErrorMessage.set('Seleziona una data di inizio');
+      return;
+    }
+
+    if (!months || months <= 0) {
+      this.formErrorMessage.set('Seleziona una durata valida');
+      return;
+    }
+
+    if (this.isRenewingSubscription()) {
+      return;
+    }
+
+    this.isRenewingSubscription.set(true);
+
+    this.userService.renewSubscription(userId, {
+      months,
+      startDate
+    }).subscribe({
       next: () => {
-        this.loadUser(userId); // 🔥 refresh dati
-        this.successMessage.set('Abbonamento aggiornato');
+        this.isRenewingSubscription.set(false);
+        this.showRenewModal.set(false);
+        this.selectedMonths.set(1);
+        this.selectedStartDate.set('');
+        this.loadUser(userId);
+        this.successMessage.set('Abbonamento aggiornato con successo');
       },
       error: err => {
         console.error('Errore rinnovo abbonamento', err);
+        this.isRenewingSubscription.set(false);
         this.formErrorMessage.set(
           err?.error?.message || 'Errore durante il rinnovo abbonamento'
         );
       }
     });
+  }
+
+  formatPreviewDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    return new Intl.DateTimeFormat('it-IT').format(date);
+  }
+
+  private getTodayDateString(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

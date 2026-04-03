@@ -41,3 +41,8 @@ export interface CreateManagedUserRequest {
   email: string;
   password: string;
 }
+
+export interface RenewSubscriptionRequest {
+  months: number;
+  startDate: string;
+}

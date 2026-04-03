@@ -1,7 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserSummaryResponse, UserDetailResponse, UpdateUserStatusRequest, ResetUserPasswordRequest, CreateManagedUserRequest } from '../models/user.models';
+import {
+  UserSummaryResponse,
+  UserDetailResponse,
+  UpdateUserStatusRequest,
+  ResetUserPasswordRequest,
+  CreateManagedUserRequest,
+  RenewSubscriptionRequest
+} from '../models/user.models';
 import { environment } from '../../../enviroments/environment';
 
 @Injectable({
@@ -42,10 +49,10 @@ export class UserService {
     );
   }
 
-  renewSubscription(userId: number, months: number) {
+  renewSubscription(userId: number, request: RenewSubscriptionRequest) {
     return this.http.put<void>(
       `${this.managerBaseUrl}/${userId}/renew-subscription`,
-      { months }
+      request
     );
   }
 }

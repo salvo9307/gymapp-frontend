@@ -125,16 +125,6 @@
   background: #fef2f2;
 }
 
-@media (max-width: 900px) {
-  .detail-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width {
-    grid-column: auto;
-  }
-}
-
 .reset-password-panel {
   margin-top: 20px;
   padding: 20px;
@@ -180,16 +170,8 @@
   border: 1px solid #fecaca;
 }
 
-.subscription-box {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-}
-
-.subscription-info {
-  margin-bottom: 12px;
+.subscription-card {
+  position: relative;
 }
 
 .subscription-status {
@@ -208,20 +190,135 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .renew-actions select {
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #d1d5db;
+  background: white;
 }
 
 .renew-actions button {
-  padding: 8px 14px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
   border: none;
   background: #111827;
   color: white;
   cursor: pointer;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.renew-modal {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.renew-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.renew-modal-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #111827;
+}
+
+.modal-close-btn {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.renew-modal-text {
+  margin: 0;
+  color: #6b7280;
+}
+
+.renew-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.renew-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.renew-form span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.renew-form select,
+.renew-form input {
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 14px;
+}
+
+.renew-preview {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.renew-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .renew-form {
+    grid-template-columns: 1fr;
+  }
+
+  .renew-modal {
+    padding: 18px;
+    border-radius: 16px;
+  }
+}

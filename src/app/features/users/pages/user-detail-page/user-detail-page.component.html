@@ -1,7 +1,7 @@
 <div class="user-detail-page">
   <div class="page-header">
     <div>
-      <button class="back-button" (click)="goBack()">← Torna agli utenti</button>
+      <button class="back-button" type="button" (click)="goBack()">← Torna agli utenti</button>
       <h1>Dettaglio utente</h1>
       <p>Informazioni anagrafiche e stato scheda</p>
     </div>
@@ -40,17 +40,13 @@
       <div class="detail-card full-width subscription-card">
         <span class="label">Abbonamento</span>
 
-        <!-- STATO -->
         <div class="subscription-status">
-
-          <!-- ATTIVO -->
           <ng-container *ngIf="isSubscriptionActive(); else expiredBlock">
             <strong class="ok">
               Attivo fino al {{ user()!.subscriptionEndDate | date:'dd/MM/yyyy' }}
             </strong>
           </ng-container>
 
-          <!-- SCADUTO / NON PRESENTE -->
           <ng-template #expiredBlock>
             <strong class="no">
               {{
@@ -60,13 +56,9 @@
               }}
             </strong>
           </ng-template>
-
         </div>
 
-        <!-- RINNOVO -->
         <div class="renew-actions">
-
-          <!-- SELECT -->
           <select #monthsSelect>
             <option [value]="1">1 mese</option>
             <option [value]="3">3 mesi</option>
@@ -74,15 +66,9 @@
             <option [value]="12">12 mesi</option>
           </select>
 
-          <!-- LABEL DINAMICA -->
-          <button (click)="renew(+monthsSelect.value)">
-            {{
-              isSubscriptionActive()
-                ? 'Estendi abbonamento'
-                : 'Rinnova abbonamento'
-            }}
+          <button type="button" (click)="openRenewModal(+monthsSelect.value)">
+            {{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}
           </button>
-
         </div>
       </div>
 
@@ -99,12 +85,15 @@
     <div class="actions-panel">
       <button
         class="primary-btn"
-        [disabled]="!user()!.latestWorkoutPlanId">
+        type="button"
+        [disabled]="!user()!.latestWorkoutPlanId"
+        (click)="openWorkoutPlan()">
         Apri scheda
       </button>
 
       <button
         class="secondary-btn"
+        type="button"
         [disabled]="!user()!.latestWorkoutPlanId"
         (click)="editWorkoutPlan()">
         Modifica scheda
@@ -112,6 +101,7 @@
 
       <button
         class="secondary-btn"
+        type="button"
         [disabled]="!user()!.latestWorkoutPlanId"
         (click)="duplicateWorkoutPlan()">
         Duplica scheda
@@ -119,20 +109,11 @@
 
       <button
         class="secondary-btn"
+        type="button"
         (click)="createWorkoutPlan()">
         Nuova scheda
       </button>
 
-      <!--
-      <button
-        class="secondary-btn"
-        [disabled]="isUpdatingStatus()"
-        (click)="toggleUserStatus()">
-        {{ isUpdatingStatus()
-            ? 'Aggiornamento...'
-            : (user()!.active ? 'Disattiva utente' : 'Riattiva utente') }}
-      </button>
--->
       <button
         class="secondary-btn"
         type="button"
@@ -140,6 +121,7 @@
         {{ showResetPasswordForm() ? 'Chiudi reset password' : 'Reset password' }}
       </button>
     </div>
+
     <div class="feedback-message success" *ngIf="successMessage()">
       {{ successMessage() }}
     </div>
@@ -152,22 +134,85 @@
       </div>
 
       <div class="reset-password-form">
-          <input
-            #passwordInput
-            type="password"
-            placeholder="Inserisci nuova password"
-            [value]="newPassword()"
-            (input)="onNewPasswordChange(passwordInput.value)"
-          />
+        <input
+          #passwordInput
+          type="password"
+          placeholder="Inserisci nuova password"
+          [value]="newPassword()"
+          (input)="onNewPasswordChange(passwordInput.value)" />
 
-          <button
-            class="primary-btn"
-            type="button"
-            [disabled]="isResettingPassword()"
-            (click)="submitResetPassword()">
-            {{ isResettingPassword() ? 'Salvataggio...' : 'Salva nuova password' }}
-          </button>
-        </div>
+        <button
+          class="primary-btn"
+          type="button"
+          [disabled]="isResettingPassword()"
+          (click)="submitResetPassword()">
+          {{ isResettingPassword() ? 'Salvataggio...' : 'Salva nuova password' }}
+        </button>
+      </div>
     </div>
   </ng-container>
+
+  <div class="modal-backdrop" *ngIf="showRenewModal()" (click)="closeRenewModal()">
+    <div class="renew-modal" (click)="$event.stopPropagation()">
+      <div class="renew-modal-header">
+        <h3>{{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}</h3>
+        <button class="modal-close-btn" type="button" (click)="closeRenewModal()">×</button>
+      </div>
+
+      <p class="renew-modal-text">
+        Seleziona da quale data deve partire l’abbonamento.
+      </p>
+
+      <div class="renew-form">
+        <label>
+          <span>Durata</span>
+          <select
+            #monthsModalSelect
+            [value]="selectedMonths()"
+            (change)="onRenewMonthsChange(monthsModalSelect.value)">
+            <option [value]="1">1 mese</option>
+            <option [value]="3">3 mesi</option>
+            <option [value]="6">6 mesi</option>
+            <option [value]="12">12 mesi</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Data inizio</span>
+          <input
+            #startDateInput
+            type="date"
+            [value]="selectedStartDate()"
+            (input)="onRenewStartDateChange(startDateInput.value)" />
+        </label>
+      </div>
+
+      <div class="renew-preview" *ngIf="previewEndDate() as preview">
+        Scadenza prevista:
+        <strong>{{ formatPreviewDate(preview) }}</strong>
+      </div>
+
+      <div class="feedback-message error" *ngIf="formErrorMessage()">
+        {{ formErrorMessage() }}
+      </div>
+
+      <div class="renew-modal-actions">
+        <button
+          class="secondary-btn"
+          type="button"
+          [disabled]="isRenewingSubscription()"
+          (click)="closeRenewModal()">
+          Annulla
+        </button>
+
+        <button
+          class="primary-btn"
+          type="button"
+          [disabled]="isRenewingSubscription()"
+          (click)="confirmRenewSubscription()">
+          {{ isRenewingSubscription() ? 'Salvataggio...' : 'Conferma' }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

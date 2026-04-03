@@ -1,7 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../enviroments/environment';
-import { AdminDashboardResponse } from '../models/admin-dashboard.models';
+import {
+  AdminDashboardResponse,
+  RenewGymSubscriptionRequest
+} from '../models/admin-dashboard.models';
 
 @Injectable({
   providedIn: 'root'
@@ -48,12 +51,12 @@ export class AdminDashboardService {
       `${environment.apiUrl}/admin/gyms/${gymId}/manager/reset-password`,
       { newPassword }
     );
-  }  
+  }
 
-  renewGymSubscription(gymId: number, months: number) {
-    return this.http.put(
+  renewGymSubscription(gymId: number, request: RenewGymSubscriptionRequest) {
+    return this.http.put<void>(
       `${environment.apiUrl}/admin/gyms/${gymId}/renew-subscription`,
-      { months }
+      request
     );
   }
 }
