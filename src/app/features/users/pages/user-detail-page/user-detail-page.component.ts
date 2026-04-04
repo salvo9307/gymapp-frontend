@@ -225,7 +225,15 @@ export class UserDetailPageComponent implements OnInit {
     this.successMessage.set('');
     this.formErrorMessage.set('');
     this.selectedMonths.set(months);
-    this.selectedStartDate.set(this.getTodayDateString());
+
+    const subscriptionEndDate = this.user()?.subscriptionEndDate;
+
+    if (subscriptionEndDate) {
+      this.selectedStartDate.set(this.toDateInputValue(subscriptionEndDate));
+    } else {
+      this.selectedStartDate.set(this.getTodayDateString());
+    }
+
     this.showRenewModal.set(true);
   }
 
@@ -314,4 +322,12 @@ export class UserDetailPageComponent implements OnInit {
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
+  private toDateInputValue(dateValue: string | Date): string {
+  const date = new Date(dateValue);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 }

@@ -58,18 +58,14 @@
           </ng-template>
         </div>
 
-        <div class="renew-actions">
-          <select #monthsSelect>
-            <option [value]="1">1 mese</option>
-            <option [value]="3">3 mesi</option>
-            <option [value]="6">6 mesi</option>
-            <option [value]="12">12 mesi</option>
-          </select>
-
-          <button type="button" (click)="openRenewModal(+monthsSelect.value)">
-            {{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}
-          </button>
-        </div>
+          <div class="renew-actions">
+            <button
+              class="primary-btn"
+              type="button"
+              (click)="openRenewModal(1)">
+              {{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}
+            </button>
+          </div>
       </div>
 
       <div class="detail-card full-width">
