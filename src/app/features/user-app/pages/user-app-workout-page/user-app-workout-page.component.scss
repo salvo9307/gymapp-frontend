@@ -99,6 +99,14 @@
   opacity: 0.95;
 }
 
+.logout-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .save-status {
   font-size: 13px;
   color: #9ae6b4;
@@ -194,7 +202,8 @@ td {
   word-break: break-word;
 }
 
-.row-box td:nth-child(3) {
+.row-box td:nth-child(3),
+.row-box td:nth-child(4) {
   color: #9fb0cc;
   font-size: 14px;
   white-space: nowrap;
@@ -275,7 +284,8 @@ input[type='number']:focus {
     align-items: stretch;
   }
 
-  .actions .btn-primary {
+  .actions .btn-primary,
+  .actions .logout-btn {
     width: 100%;
   }
 
@@ -340,7 +350,8 @@ input[type='number']:focus {
     margin-bottom: 8px;
   }
 
-  .row-box td:nth-child(3) {
+  .row-box td:nth-child(3),
+  .row-box td:nth-child(4) {
     font-size: 13px;
     margin-bottom: 10px;
     white-space: normal;
@@ -353,6 +364,12 @@ input[type='number']:focus {
   }
 
   .row-box td:nth-child(4)::before {
+    content: 'Recupero: ';
+    color: #90a3c3;
+    font-weight: 600;
+  }
+
+  .row-box td:nth-child(5)::before {
     content: 'Peso';
     display: block;
     margin-bottom: 6px;
@@ -362,62 +379,4 @@ input[type='number']:focus {
     letter-spacing: 0.08em;
     font-weight: 700;
   }
-}
-
-.user-app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.logout-btn {
-  border: 0;
-  border-radius: 10px;
-  padding: 10px 14px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 1000;
-}
-
-.subscription-popup {
-  width: 100%;
-  max-width: 420px;
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  color: #111827;
-}
-
-.subscription-popup h3 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.subscription-popup p {
-  margin: 0;
-}
-
-.subscription-date {
-  color: #6b7280;
-}
-
-.popup-actions {
-  display: flex;
-  justify-content: flex-end;
 }

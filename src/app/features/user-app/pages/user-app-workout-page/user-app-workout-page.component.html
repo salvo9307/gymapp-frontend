@@ -1,4 +1,23 @@
 <div class="wrapper">
+  <div class="hero">
+    <div>
+      <h1>{{ workoutPlan()?.title || 'La tua scheda' }}</h1>
+      <div class="hero-subtitle">La tua scheda sempre a portata di mano</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" type="button" (click)="resetWeightsForCurrentDay()">
+        Reset pesi
+      </button>
+
+      <button class="logout-btn" type="button" (click)="logout()">
+        Logout
+      </button>
+
+      <div class="save-status">{{ saveStatus() }}</div>
+    </div>
+  </div>
+
   <div *ngIf="isLoading()" class="state-box">
     Caricamento scheda...
   </div>
@@ -8,25 +27,9 @@
   </div>
 
   <ng-container *ngIf="workoutPlan() && !isLoading()">
-    <section class="hero">
-      <div>
-        <h1>{{ workoutPlan()!.title }}</h1>
-        <div class="hero-subtitle">La tua scheda sempre a portata di mano</div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-primary" type="button" (click)="resetWeightsForCurrentDay()">
-          Reset pesi
-        </button>
-        <button type="button" class="logout-btn" (click)="logout()">Logout</button>
-        <div class="save-status">{{ saveStatus() }}</div>
-      </div>
-    </section>
-
     <div class="tabs">
       <button
         *ngFor="let day of workoutPlan()!.days; trackBy: trackDay"
-        type="button"
         class="tab-btn"
         [class.active]="selectedDay() === day.dayOrder"
         (click)="showDay(day.dayOrder)">
@@ -34,8 +37,8 @@
       </button>
     </div>
 
-    <section class="grid" *ngIf="currentDay() as day">
-      <article class="day-card">
+    <div class="grid" *ngIf="currentDay() as day">
+      <div class="day-card">
         <div class="day-header">
           <div class="badge">Giorno {{ day.dayOrder }}</div>
           <h2>{{ day.title }}</h2>
@@ -48,51 +51,39 @@
                 <th>#</th>
                 <th>Esercizio</th>
                 <th>Serie x Rep</th>
+                <th>Recupero</th>
                 <th>Peso</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr class="row-box" *ngFor="let exercise of day.exercises; trackBy: trackExercise">
-                <td>{{ exercise.exerciseOrder }}</td>
+              <tr
+                class="row-box"
+                *ngFor="let exercise of day.exercises; let i = index; trackBy: trackExercise">
+                <td>{{ i + 1 }}</td>
                 <td>{{ exercise.exerciseName }}</td>
-                <td>{{ exercise.sets ?? '-' }} x {{ exercise.reps || '-' }}</td>
+                <td>{{ exercise.sets }} x {{ exercise.reps || '—' }}</td>
+                <td>{{ formatRestSeconds(exercise.restSeconds) }}</td>
                 <td>
                   <input
-                    #weightInput
                     type="number"
+                    inputmode="decimal"
+                    step="0.5"
+                    min="0"
                     placeholder="kg"
                     [value]="exercise.lastWeight ?? ''"
-                    (change)="onWeightChange(exercise, weightInput.value)"
+                    (change)="onWeightChange(exercise, $any($event.target).value)"
                   />
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <div class="footer-info">
+            Compila il peso usato per ogni esercizio. Il recupero è espresso in secondi.
+          </div>
         </div>
-      </article>
-    </section>
-
-    <div class="footer-info">
-      I pesi vengono salvati automaticamente mentre li aggiorni.
-    </div>
-  </ng-container>
-
-  <div class="modal-backdrop" *ngIf="showSubscriptionPopup()" (click)="closeSubscriptionPopup()">
-    <div class="subscription-popup" (click)="$event.stopPropagation()">
-      <h3>Avviso abbonamento</h3>
-
-      <p>{{ subscriptionWarningMessage() }}</p>
-
-      <p *ngIf="workoutPlan()?.subscriptionEndDate" class="subscription-date">
-        Scadenza: {{ workoutPlan()?.subscriptionEndDate | date:'dd/MM/yyyy' }}
-      </p>
-
-      <div class="popup-actions">
-        <button class="btn-primary" type="button" (click)="closeSubscriptionPopup()">
-          Ho capito
-        </button>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>

@@ -6,6 +6,7 @@ export interface WorkoutExerciseResponse {
   sets: number | null;
   reps: string | null;
   lastWeight: number | null;
+  restSeconds: number | null;
 }
 
 export interface WorkoutDayResponse {
@@ -28,6 +29,7 @@ export interface WorkoutExerciseRequest {
   exerciseOrder: number;
   sets: number | null;
   reps: string | null;
+  restSeconds: number | null;
 }
 
 export interface WorkoutDayRequest {

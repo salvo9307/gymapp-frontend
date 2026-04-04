@@ -4,6 +4,7 @@ export interface AppWorkoutExerciseResponse {
   exerciseOrder: number;
   sets: number | null;
   reps: string | null;
+  restSeconds: number | null;
   lastWeight: number | null;
 }
 

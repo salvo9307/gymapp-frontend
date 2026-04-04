@@ -27,8 +27,6 @@ export class UserAppWorkoutPageComponent implements OnInit {
   saveStatus = signal('Pronto');
   selectedDay = signal<number | null>(null);
 
-  showSubscriptionPopup = signal(false);
-
   currentDay = computed(() => {
     const plan = this.workoutPlan();
     const dayOrder = this.selectedDay();
@@ -38,40 +36,6 @@ export class UserAppWorkoutPageComponent implements OnInit {
     }
 
     return plan.days.find(day => day.dayOrder === dayOrder) ?? null;
-  });
-
-  subscriptionDaysLeft = computed(() => {
-    const endDate = this.workoutPlan()?.subscriptionEndDate;
-    if (!endDate) return null;
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const end = new Date(endDate);
-    end.setHours(0, 0, 0, 0);
-
-    const diffMs = end.getTime() - today.getTime();
-    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-  });
-
-  subscriptionWarningMessage = computed(() => {
-    const daysLeft = this.subscriptionDaysLeft();
-
-    if (daysLeft === null) return '';
-
-    if (daysLeft < 0) {
-      return 'Il tuo abbonamento è scaduto.';
-    }
-
-    if (daysLeft === 0) {
-      return 'Il tuo abbonamento scade oggi.';
-    }
-
-    if (daysLeft === 1) {
-      return 'Il tuo abbonamento scade tra 1 giorno.';
-    }
-
-    return `Il tuo abbonamento scade tra ${daysLeft} giorni.`;
   });
 
   ngOnInit(): void {
@@ -87,8 +51,6 @@ export class UserAppWorkoutPageComponent implements OnInit {
         this.workoutPlan.set(response);
         this.selectedDay.set(response.days[0]?.dayOrder ?? null);
         this.isLoading.set(false);
-
-        this.checkSubscriptionPopup();
       },
       error: err => {
         console.error('APP WORKOUT ERROR', err);
@@ -140,10 +102,6 @@ export class UserAppWorkoutPageComponent implements OnInit {
     });
   }
 
-  closeSubscriptionPopup(): void {
-    this.showSubscriptionPopup.set(false);
-  }
-
   trackDay(_: number, day: AppWorkoutDayResponse): number {
     return day.id;
   }
@@ -152,27 +110,23 @@ export class UserAppWorkoutPageComponent implements OnInit {
     return exercise.id;
   }
 
-  private checkSubscriptionPopup(): void {
-    const daysLeft = this.subscriptionDaysLeft();
-
-    if (daysLeft === null) {
-      return;
+  formatRestSeconds(restSeconds: number | null | undefined): string {
+    if (restSeconds == null || restSeconds <= 0) {
+      return '—';
     }
 
-    if (daysLeft <= 7) {
-      const storageKey = this.getSubscriptionPopupStorageKey();
-      const alreadyShown = sessionStorage.getItem(storageKey);
-
-      if (!alreadyShown) {
-        this.showSubscriptionPopup.set(true);
-        sessionStorage.setItem(storageKey, 'true');
-      }
+    if (restSeconds < 60) {
+      return `${restSeconds} sec`;
     }
-  }
 
-  private getSubscriptionPopupStorageKey(): string {
-    const endDate = this.workoutPlan()?.subscriptionEndDate ?? 'none';
-    return `app-user-subscription-popup-${endDate}`;
+    const minutes = Math.floor(restSeconds / 60);
+    const seconds = restSeconds % 60;
+
+    if (seconds === 0) {
+      return `${minutes} min`;
+    }
+
+    return `${minutes} min ${seconds} sec`;
   }
 
   private updateLocalWeight(exerciseId: number, weight: number | null): void {

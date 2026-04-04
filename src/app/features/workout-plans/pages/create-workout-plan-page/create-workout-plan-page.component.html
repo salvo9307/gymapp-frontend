@@ -1,13 +1,13 @@
 <div class="create-workout-page">
   <div class="page-header">
     <div>
-        <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
-        <h1>{{ isEditMode() ? 'Modifica scheda' : 'Crea scheda' }}</h1>
-        <p>
+      <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
+      <h1>{{ isEditMode() ? 'Modifica scheda' : 'Crea scheda' }}</h1>
+      <p>
         {{ isEditMode() ? 'Aggiorna la scheda attiva dell\'utente' : 'Costruisci una nuova scheda allenamento per l\'utente' }}
-        </p>
+      </p>
     </div>
-   </div>
+  </div>
 
   <div *ngIf="isLoading()" class="state-box">
     Caricamento dati...
@@ -39,19 +39,18 @@
     <div class="day-card" *ngFor="let day of days; let dayIndex = index">
       <div class="day-top">
         <div class="day-title-wrap">
-            <span class="label">Giorno {{ day.dayOrder }}</span>
-            <input
+          <span class="label">Giorno {{ day.dayOrder }}</span>
+          <input
             type="text"
             [(ngModel)]="day.title"
             placeholder="Titolo giornata"
-            />
+          />
         </div>
 
         <button class="danger-btn small" (click)="removeDay(dayIndex)">
-            Elimina giornata
+          Elimina giornata
         </button>
       </div>
-      
 
       <div class="exercise-toolbar">
         <button class="ghost-btn small" (click)="addExercise(day)">+ Aggiungi esercizio</button>
@@ -62,6 +61,7 @@
           <div>Esercizio</div>
           <div>Serie</div>
           <div>Ripetizioni</div>
+          <div>Recupero (sec)</div>
           <div>Azioni</div>
         </div>
 
@@ -84,6 +84,10 @@
           </div>
 
           <div>
+            <input type="number" [(ngModel)]="exercise.restSeconds" placeholder="Es. 90" />
+          </div>
+
+          <div>
             <button class="danger-btn small" (click)="removeExercise(day, exIndex)">Rimuovi</button>
           </div>
         </div>
@@ -97,42 +101,32 @@
     </div>
   </div>
 
-    <div class="page-header">
-        <div>
-                <button class="back-button" (click)="goBack()">← Torna al dettaglio utente</button>
-                <h1>{{ isEditMode() ? 'Modifica scheda' : 'Crea scheda' }}</h1>
-                <p>
-                {{ isEditMode() ? 'Aggiorna la scheda attiva dell\'utente' : 'Costruisci una nuova scheda allenamento per l\'utente' }}
-                </p>
-        </div>
-    </div>
+  <div class="feedback-message error" *ngIf="formErrorMessage()">
+    {{ formErrorMessage() }}
+  </div>
 
-    <div class="feedback-message error" *ngIf="formErrorMessage()">
-        {{ formErrorMessage() }}
-      </div>
+  <div class="feedback-message error" *ngIf="errorMessage()">
+    {{ errorMessage() }}
+  </div>
 
-      <div class="feedback-message error" *ngIf="errorMessage()">
-        {{ errorMessage() }}
-      </div>
+  <div class="feedback-message success" *ngIf="successMessage()">
+    {{ successMessage() }}
+  </div>
 
-      <div class="feedback-message success" *ngIf="successMessage()">
-        {{ successMessage() }}
-      </div>
+  <div class="page-actions">
+    <button
+      type="button"
+      class="secondary-btn"
+      (click)="goBack()">
+      Annulla
+    </button>
 
-      <div class="page-actions">
-        <button
-          type="button"
-          class="secondary-btn"
-          (click)="goBack()">
-          Annulla
-        </button>
-
-        <button
-          type="button"
-          class="primary-btn"
-          [disabled]="isSaving()"
-          (click)="saveWorkoutPlan()">
-          {{ isSaving() ? 'Salvataggio...' : (isEditMode() ? 'Salva modifiche' : 'Crea scheda') }}
-        </button>
-      </div>
+    <button
+      type="button"
+      class="primary-btn"
+      [disabled]="isSaving()"
+      (click)="saveWorkoutPlan()">
+      {{ isSaving() ? 'Salvataggio...' : (isEditMode() ? 'Salva modifiche' : 'Crea scheda') }}
+    </button>
+  </div>
 </div>

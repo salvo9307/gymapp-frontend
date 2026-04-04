@@ -21,6 +21,7 @@ type EditableExercise = {
   exerciseOrder: number;
   sets: number | null;
   reps: string;
+  restSeconds: number | null;
 };
 
 type EditableDay = {
@@ -138,7 +139,8 @@ export class CreateWorkoutPlanPageComponent implements OnInit {
           exerciseId: resolvedExerciseId,
           exerciseOrder: exercise.exerciseOrder,
           sets: exercise.sets,
-          reps: exercise.reps ?? ''
+          reps: exercise.reps ?? '',
+          restSeconds: exercise.restSeconds ?? null
         };
       })
     }));
@@ -166,7 +168,8 @@ export class CreateWorkoutPlanPageComponent implements OnInit {
       exerciseId: null,
       exerciseOrder: day.exercises.length + 1,
       sets: null,
-      reps: ''
+      reps: '',
+      restSeconds: null
     });
   }
 
@@ -229,7 +232,8 @@ export class CreateWorkoutPlanPageComponent implements OnInit {
           exerciseId: exercise.exerciseId!,
           exerciseOrder: exercise.exerciseOrder,
           sets: exercise.sets,
-          reps: exercise.reps?.trim() || null
+          reps: exercise.reps?.trim() || null,
+          restSeconds: exercise.restSeconds
         }))
       }))
     };

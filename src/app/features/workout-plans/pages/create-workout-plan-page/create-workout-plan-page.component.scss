@@ -108,7 +108,7 @@ select:focus {
 
 .exercise-row {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 140px 160px 120px;
+  grid-template-columns: minmax(260px, 1fr) 120px 160px 160px 120px;
   gap: 12px;
   align-items: center;
 }
@@ -189,9 +189,9 @@ select:focus {
   background: #ecfdf5;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .exercise-row {
-    grid-template-columns: minmax(220px, 1fr) 120px 140px 110px;
+    grid-template-columns: minmax(220px, 1fr) 110px 130px 140px 110px;
   }
 }
 
@@ -226,6 +226,7 @@ select:focus {
     width: 100%;
   }
 }
+
 .page-actions {
   display: flex;
   justify-content: flex-end;
