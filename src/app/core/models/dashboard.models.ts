@@ -2,6 +2,7 @@ export interface ManagerDashboardResponse {
   gymId: number;
   gymName: string;
   totalUsers: number;
+  activeUsersCount: number;
   usersWithActivePlan: number;
   usersWithoutActivePlan: number;
   totalExercises: number;
@@ -10,6 +11,5 @@ export interface ManagerDashboardResponse {
   expiredUsersCount: number;
   subscriptionEndDate: string | null;
   maxUsers: number | null;
-  activeUsersCount: number;
   availableSlots: number | null;
 }

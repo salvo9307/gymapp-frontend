@@ -123,7 +123,7 @@ export class ManagerDashboardPageComponent implements OnInit {
       return '';
     }
 
-    return `Hai raggiunto il numero massimo di iscritti previsto dal tuo pacchetto (${this.dashboard.maxUsers}). Non puoi aggiungere nuovi utenti finché non liberi posti o aumenti il limite.`;
+    return `Hai raggiunto il numero massimo di utenti attivi previsto dal tuo pacchetto (${this.dashboard.maxUsers}). Non puoi aggiungere nuovi utenti finché non liberi posti o aumenti il limite.`;
   }
 
   private checkSubscriptionPopup(): void {
