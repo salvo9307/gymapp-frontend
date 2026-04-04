@@ -24,18 +24,18 @@
 
     <div class="cards-grid">
       <div class="stat-card">
-        <span class="label">Utenti totali</span>
-        <strong>{{ dashboard.totalUsers }}</strong>
+        <span class="label">Utenti attivi</span>
+        <strong>{{ dashboard.activeUsersCount }}</strong>
       </div>
 
       <div class="stat-card">
-        <span class="label">Utenti con scheda attiva</span>
-        <strong>{{ dashboard.usersWithActivePlan }}</strong>
+        <span class="label">Limite utenti</span>
+        <strong>{{ dashboard.maxUsers ?? '∞' }}</strong>
       </div>
 
-      <div class="stat-card">
-        <span class="label">Utenti senza scheda</span>
-        <strong>{{ dashboard.usersWithoutActivePlan }}</strong>
+      <div class="stat-card" [class.limit-reached]="hasReachedMaxUsers()">
+        <span class="label">Posti disponibili</span>
+        <strong>{{ dashboard.availableSlots ?? '∞' }}</strong>
       </div>
 
       <div class="stat-card">
@@ -70,6 +70,10 @@
       </div>
 
       <div class="subscription-alerts">
+        <div *ngIf="hasReachedMaxUsers()" class="alert-box danger">
+          Hai raggiunto il numero massimo di utenti attivi consentiti dal tuo pacchetto.
+        </div>
+
         <div *ngIf="hasExpiringUsers()" class="alert-box warning">
           Hai {{ dashboard.expiringUsersCount }} {{ getExpiringUsersLabel() }} nei prossimi giorni.
         </div>
@@ -79,9 +83,9 @@
         </div>
 
         <div
-          *ngIf="!hasExpiringUsers() && !hasExpiredUsers()"
+          *ngIf="!hasReachedMaxUsers() && !hasExpiringUsers() && !hasExpiredUsers()"
           class="alert-box success">
-          Nessuna criticità sugli abbonamenti in questo momento.
+          Nessuna criticità in questo momento.
         </div>
       </div>
     </div>
@@ -99,6 +103,25 @@
 
       <div class="popup-actions">
         <button class="popup-btn" type="button" (click)="closeSubscriptionPopup()">
+          Ho capito
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="showMaxUsersPopup" (click)="closeMaxUsersPopup()">
+    <div class="subscription-popup" (click)="$event.stopPropagation()">
+      <h3>Limite utenti raggiunto</h3>
+
+      <p>{{ getMaxUsersWarningMessage() }}</p>
+
+      <p class="subscription-date" *ngIf="dashboard">
+        Utenti attivi: {{ dashboard.activeUsersCount }}
+        <span *ngIf="dashboard.maxUsers !== null"> / {{ dashboard.maxUsers }}</span>
+      </p>
+
+      <div class="popup-actions">
+        <button class="popup-btn" type="button" (click)="closeMaxUsersPopup()">
           Ho capito
         </button>
       </div>

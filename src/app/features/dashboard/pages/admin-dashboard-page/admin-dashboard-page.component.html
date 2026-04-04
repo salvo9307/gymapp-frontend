@@ -34,6 +34,15 @@
       />
 
       <input
+        #gymMaxUsersInput
+        type="number"
+        min="0"
+        placeholder="Limite utenti attivi (vuoto = illimitato)"
+        [value]="newGymMaxUsers"
+        (input)="newGymMaxUsers = gymMaxUsersInput.value"
+      />
+
+      <input
         #managerFirstNameInput
         type="text"
         placeholder="Nome manager"
@@ -165,6 +174,23 @@
           </div>
         </div>
 
+        <div class="gym-limits-grid">
+          <div class="info-tile">
+            <span class="info-label">Utenti attivi</span>
+            <strong>{{ gym.activeUsersCount }}</strong>
+          </div>
+
+          <div class="info-tile">
+            <span class="info-label">Limite pacchetto</span>
+            <strong>{{ getMaxUsersLabel(gym) }}</strong>
+          </div>
+
+          <div class="info-tile">
+            <span class="info-label">Posti disponibili</span>
+            <strong>{{ getAvailableSlotsLabel(gym) }}</strong>
+          </div>
+        </div>
+
         <div class="manager-box">
           <span class="manager-label">Manager</span>
 
@@ -175,6 +201,60 @@
 
           <ng-template #noManager>
             <strong>Nessun manager associato</strong>
+          </ng-template>
+        </div>
+
+        <div class="max-users-panel">
+          <h4>Limite utenti attivi</h4>
+
+          <div class="feedback-message error" *ngIf="editingMaxUsersGymId === gym.id && maxUsersErrorMessage">
+            {{ maxUsersErrorMessage }}
+          </div>
+
+          <div class="feedback-message success" *ngIf="editingMaxUsersGymId === gym.id && maxUsersSuccessMessage">
+            {{ maxUsersSuccessMessage }}
+          </div>
+
+          <ng-container *ngIf="editingMaxUsersGymId === gym.id; else maxUsersReadMode">
+            <div class="max-users-form">
+              <input
+                #maxUsersInput
+                type="number"
+                min="0"
+                placeholder="Vuoto = illimitato"
+                [value]="editingMaxUsersValue"
+                (input)="editingMaxUsersValue = maxUsersInput.value"
+              />
+
+              <button
+                type="button"
+                class="primary-btn"
+                [disabled]="isSavingMaxUsers"
+                (click)="saveGymMaxUsers(gym)">
+                {{ isSavingMaxUsers ? 'Salvataggio...' : 'Salva limite' }}
+              </button>
+
+              <button
+                type="button"
+                class="secondary-btn"
+                [disabled]="isSavingMaxUsers"
+                (click)="cancelEditMaxUsers()">
+                Annulla
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-template #maxUsersReadMode>
+            <div class="max-users-read">
+              <span>Attuale: <strong>{{ getMaxUsersLabel(gym) }}</strong></span>
+
+              <button
+                type="button"
+                class="secondary-btn"
+                (click)="startEditMaxUsers(gym)">
+                Modifica limite
+              </button>
+            </div>
           </ng-template>
         </div>
 

@@ -27,6 +27,7 @@ export class AdminDashboardPageComponent implements OnInit {
 
   newGymName = '';
   newGymCity = '';
+  newGymMaxUsers = '';
   newManagerFirstName = '';
   newManagerLastName = '';
   newManagerEmail = '';
@@ -47,6 +48,12 @@ export class AdminDashboardPageComponent implements OnInit {
   selectedRenewStartDate = '';
   renewErrorMessage = '';
   isRenewingGym = false;
+
+  editingMaxUsersGymId: number | null = null;
+  editingMaxUsersValue = '';
+  maxUsersErrorMessage = '';
+  maxUsersSuccessMessage = '';
+  isSavingMaxUsers = false;
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -82,6 +89,7 @@ export class AdminDashboardPageComponent implements OnInit {
   resetCreateGymForm(): void {
     this.newGymName = '';
     this.newGymCity = '';
+    this.newGymMaxUsers = '';
     this.newManagerFirstName = '';
     this.newManagerLastName = '';
     this.newManagerEmail = '';
@@ -89,9 +97,12 @@ export class AdminDashboardPageComponent implements OnInit {
   }
 
   submitCreateGym(): void {
+    const parsedMaxUsers = this.parseMaxUsers(this.newGymMaxUsers);
+
     const payload = {
       gymName: this.newGymName.trim(),
       city: this.newGymCity.trim(),
+      maxUsers: parsedMaxUsers,
       managerFirstName: this.newManagerFirstName.trim(),
       managerLastName: this.newManagerLastName.trim(),
       managerEmail: this.newManagerEmail.trim(),
@@ -102,12 +113,17 @@ export class AdminDashboardPageComponent implements OnInit {
     this.createGymSuccessMessage = '';
 
     if (!payload.gymName || !payload.managerFirstName || !payload.managerEmail || !payload.managerPassword) {
-      this.createGymErrorMessage = 'Compila tutti i campi';
+      this.createGymErrorMessage = 'Compila tutti i campi obbligatori';
       return;
     }
 
     if (payload.managerPassword.length < 6) {
       this.createGymErrorMessage = 'Password troppo corta';
+      return;
+    }
+
+    if (this.newGymMaxUsers.trim() !== '' && parsedMaxUsers === null) {
+      this.createGymErrorMessage = 'Il limite utenti deve essere un numero valido';
       return;
     }
 
@@ -124,7 +140,7 @@ export class AdminDashboardPageComponent implements OnInit {
       error: err => {
         console.error(err);
         this.isCreatingGym = false;
-        this.createGymErrorMessage = 'Errore creazione palestra';
+        this.createGymErrorMessage = err?.error?.message || 'Errore creazione palestra';
       }
     });
   }
@@ -249,6 +265,57 @@ export class AdminDashboardPageComponent implements OnInit {
       });
   }
 
+  startEditMaxUsers(gym: AdminDashboardGymResponse): void {
+    this.editingMaxUsersGymId = gym.id;
+    this.editingMaxUsersValue = gym.maxUsers != null ? String(gym.maxUsers) : '';
+    this.maxUsersErrorMessage = '';
+    this.maxUsersSuccessMessage = '';
+  }
+
+  cancelEditMaxUsers(): void {
+    this.editingMaxUsersGymId = null;
+    this.editingMaxUsersValue = '';
+    this.maxUsersErrorMessage = '';
+  }
+
+  saveGymMaxUsers(gym: AdminDashboardGymResponse): void {
+    const parsedMaxUsers = this.parseMaxUsers(this.editingMaxUsersValue);
+
+    if (this.editingMaxUsersValue.trim() !== '' && parsedMaxUsers === null) {
+      this.maxUsersErrorMessage = 'Inserisci un numero valido o lascia vuoto per illimitato';
+      return;
+    }
+
+    this.isSavingMaxUsers = true;
+    this.maxUsersErrorMessage = '';
+    this.maxUsersSuccessMessage = '';
+
+    this.adminDashboardService.updateGymMaxUsers(gym.id, {
+      maxUsers: parsedMaxUsers
+    }).subscribe({
+      next: () => {
+        this.isSavingMaxUsers = false;
+        this.maxUsersSuccessMessage = 'Limite utenti aggiornato';
+        this.editingMaxUsersGymId = null;
+        this.editingMaxUsersValue = '';
+        this.loadDashboard();
+      },
+      error: err => {
+        console.error(err);
+        this.isSavingMaxUsers = false;
+        this.maxUsersErrorMessage = err?.error?.message || 'Errore aggiornamento limite utenti';
+      }
+    });
+  }
+
+  getMaxUsersLabel(gym: AdminDashboardGymResponse): string {
+    return gym.maxUsers == null ? 'Illimitato' : String(gym.maxUsers);
+  }
+
+  getAvailableSlotsLabel(gym: AdminDashboardGymResponse): string {
+    return gym.availableSlots == null ? '∞' : String(gym.availableSlots);
+  }
+
   isGymExpiringSoon(endDate?: string | null): boolean {
     if (!endDate) return false;
 
@@ -319,5 +386,21 @@ export class AdminDashboardPageComponent implements OnInit {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private parseMaxUsers(value: string): number | null {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      return null;
+    }
+
+    const parsed = Number(trimmed);
+
+    if (!Number.isInteger(parsed) || parsed < 0) {
+      return null;
+    }
+
+    return parsed;
   }
 }

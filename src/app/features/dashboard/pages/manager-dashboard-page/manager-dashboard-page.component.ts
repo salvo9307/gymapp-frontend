@@ -19,6 +19,7 @@ export class ManagerDashboardPageComponent implements OnInit {
   errorMessage = '';
 
   showSubscriptionPopup = false;
+  showMaxUsersPopup = false;
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -35,6 +36,7 @@ export class ManagerDashboardPageComponent implements OnInit {
 
         if (isPlatformBrowser(this.platformId)) {
           this.checkSubscriptionPopup();
+          this.checkMaxUsersPopup();
         }
       },
       error: err => {
@@ -53,6 +55,14 @@ export class ManagerDashboardPageComponent implements OnInit {
     return !!this.dashboard?.expiredUsersCount && this.dashboard.expiredUsersCount > 0;
   }
 
+  hasReachedMaxUsers(): boolean {
+    if (!this.dashboard || this.dashboard.maxUsers == null) {
+      return false;
+    }
+
+    return this.dashboard.activeUsersCount >= this.dashboard.maxUsers;
+  }
+
   getExpiringUsersLabel(): string {
     const count = this.dashboard?.expiringUsersCount ?? 0;
     return count === 1 ? 'utente in scadenza' : 'utenti in scadenza';
@@ -65,6 +75,10 @@ export class ManagerDashboardPageComponent implements OnInit {
 
   closeSubscriptionPopup(): void {
     this.showSubscriptionPopup = false;
+  }
+
+  closeMaxUsersPopup(): void {
+    this.showMaxUsersPopup = false;
   }
 
   getGymSubscriptionDaysLeft(): number | null {
@@ -104,30 +118,58 @@ export class ManagerDashboardPageComponent implements OnInit {
     return `L’abbonamento della palestra scade tra ${daysLeft} giorni.`;
   }
 
+  getMaxUsersWarningMessage(): string {
+    if (!this.dashboard || this.dashboard.maxUsers == null) {
+      return '';
+    }
+
+    return `Hai raggiunto il numero massimo di iscritti previsto dal tuo pacchetto (${this.dashboard.maxUsers}). Non puoi aggiungere nuovi utenti finché non liberi posti o aumenti il limite.`;
+  }
+
   private checkSubscriptionPopup(): void {
-  const daysLeft = this.getGymSubscriptionDaysLeft();
+    const daysLeft = this.getGymSubscriptionDaysLeft();
 
-  console.log('daysLeft =', daysLeft);
-  console.log('subscriptionEndDate =', this.dashboard?.subscriptionEndDate);
+    if (daysLeft === null || daysLeft > 7) {
+      return;
+    }
 
-  if (daysLeft === null || daysLeft > 7) {
-    return;
+    const storageKey = this.getSubscriptionPopupStorageKey();
+    const alreadyShown = sessionStorage.getItem(storageKey);
+
+    if (!alreadyShown) {
+      this.showSubscriptionPopup = true;
+      sessionStorage.setItem(storageKey, 'true');
+    }
   }
 
-  const storageKey = this.getSubscriptionPopupStorageKey();
-  const alreadyShown = sessionStorage.getItem(storageKey);
+  private checkMaxUsersPopup(): void {
+    if (!this.dashboard || this.dashboard.maxUsers == null) {
+      return;
+    }
 
-  console.log('storageKey =', storageKey);
-  console.log('alreadyShown =', alreadyShown);
+    if (!this.hasReachedMaxUsers()) {
+      return;
+    }
 
-  if (!alreadyShown) {
-    this.showSubscriptionPopup = true;
-    sessionStorage.setItem(storageKey, 'true');
+    const storageKey = this.getMaxUsersPopupStorageKey();
+    const alreadyShown = sessionStorage.getItem(storageKey);
+
+    if (!alreadyShown) {
+      this.showMaxUsersPopup = true;
+      sessionStorage.setItem(storageKey, 'true');
+    }
   }
-}
 
   private getSubscriptionPopupStorageKey(): string {
     const endDate = this.dashboard?.subscriptionEndDate ?? 'none';
     return `manager-gym-subscription-popup-${endDate}`;
+  }
+
+  private getMaxUsersPopupStorageKey(): string {
+    if (!this.dashboard) {
+      return 'manager-max-users-popup';
+    }
+
+    return `manager-max-users-popup-${this.dashboard.gymId}-${this.dashboard.maxUsers}-${this.dashboard.activeUsersCount}`;
   }
 }

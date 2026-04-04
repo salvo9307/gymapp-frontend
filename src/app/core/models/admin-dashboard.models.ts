@@ -12,6 +12,9 @@ export interface AdminDashboardGymResponse {
   managerLastName: string | null;
   managerEmail: string | null;
   subscriptionEndDate: string | null;
+  maxUsers: number | null;
+  activeUsersCount: number;
+  availableSlots: number | null;
 }
 
 export interface AdminDashboardResponse {
@@ -25,4 +28,8 @@ export interface AdminDashboardResponse {
 export interface RenewGymSubscriptionRequest {
   months: number;
   startDate: string;
+}
+
+export interface UpdateGymMaxUsersRequest {
+  maxUsers: number | null;
 }
