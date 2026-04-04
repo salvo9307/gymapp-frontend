@@ -18,6 +18,9 @@ export class UserListPageComponent implements OnInit {
   users = signal<UserSummaryResponse[]>([]);
   isLoading = signal(true);
   errorMessage = signal('');
+  successMessage = signal('');
+  deletingUserId = signal<number | null>(null);
+
   searchTerm = signal('');
   selectedStatus = signal<'ACTIVE' | 'INACTIVE'>('ACTIVE');
   showCreateUserPanel = signal(false);
@@ -65,6 +68,7 @@ export class UserListPageComponent implements OnInit {
   loadUsers(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
+    this.successMessage.set('');
 
     this.userService.getUsersForManagement().subscribe({
       next: response => {
@@ -176,6 +180,8 @@ export class UserListPageComponent implements OnInit {
 
     this.createUserErrorMessage.set('');
     this.createUserSuccessMessage.set('');
+    this.errorMessage.set('');
+    this.successMessage.set('');
 
     if (!firstName || !lastName || !email || !password) {
       this.createUserErrorMessage.set('Compila tutti i campi');
@@ -205,6 +211,8 @@ export class UserListPageComponent implements OnInit {
         this.isCreatingUser.set(false);
         this.createUserSuccessMessage.set('Utente creato con successo');
         this.createUserErrorMessage.set('');
+        this.successMessage.set('');
+        this.errorMessage.set('');
         this.resetCreateUserForm();
         this.showCreateUserPanel.set(false);
         this.loadUsers();
@@ -217,6 +225,42 @@ export class UserListPageComponent implements OnInit {
         );
       }
     });
+  }
+
+  deleteUser(user: UserSummaryResponse): void {
+    if (this.deletingUserId() !== null) {
+      return;
+    }
+
+    const fullName = `${user.firstName} ${user.lastName}`.trim();
+    const confirmed = window.confirm(
+      `Vuoi eliminare definitivamente l'utente "${fullName}"?\n\nVerranno eliminati anche la sua eventuale scheda e i dati collegati.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.errorMessage.set('');
+    this.successMessage.set('');
+    this.deletingUserId.set(user.id);
+
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.deletingUserId.set(null);
+        this.successMessage.set('Utente eliminato con successo');
+        this.users.update(users => users.filter(existingUser => existingUser.id !== user.id));
+      },
+      error: err => {
+        console.error('DELETE USER ERROR', err);
+        this.deletingUserId.set(null);
+        this.errorMessage.set(err?.error?.message || 'Errore durante l’eliminazione dell’utente');
+      }
+    });
+  }
+
+  isDeletingUser(userId: number): boolean {
+    return this.deletingUserId() === userId;
   }
 
   formatDateForView(date: string): string {

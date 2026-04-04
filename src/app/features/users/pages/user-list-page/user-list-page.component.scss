@@ -138,6 +138,12 @@
   background: #fef2f2;
 }
 
+.state-box.success {
+  color: #166534;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -206,7 +212,13 @@ tbody tr:hover {
 }
 
 .actions-col {
-  width: 120px;
+  width: 180px;
+}
+
+.actions-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .actions-col button {
@@ -216,6 +228,15 @@ tbody tr:hover {
   padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.actions-col button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actions-col .danger-btn {
+  background: #b91c1c;
 }
 
 .empty-state {
@@ -229,7 +250,7 @@ tbody tr:hover {
   }
 
   table {
-    min-width: 940px;
+    min-width: 1020px;
   }
 }
 
@@ -242,6 +263,7 @@ tbody tr:hover {
   color: #9ca3af;
   font-weight: 500;
 }
+
 .search-box {
   display: flex;
   align-items: center;

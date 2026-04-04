@@ -55,4 +55,8 @@ export class UserService {
       request
     );
   }
+
+    deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.managerBaseUrl}/${userId}`);
+  }
 }

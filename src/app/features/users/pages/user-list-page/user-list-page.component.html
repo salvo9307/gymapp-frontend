@@ -109,6 +109,10 @@
     {{ errorMessage() }}
   </div>
 
+  <div *ngIf="successMessage() && !isLoading()" class="state-box success">
+    {{ successMessage() }}
+  </div>
+
   <div *ngIf="!isLoading() && !errorMessage()" class="table-card">
     <table *ngIf="filteredUsers().length > 0; else emptyState">
       <thead>
@@ -161,9 +165,19 @@
           </td>
 
           <td class="actions-col">
-            <button type="button" (click)="openUserDetail(user.id)">
-              Dettaglio
-            </button>
+            <div class="actions-group">
+              <button type="button" (click)="openUserDetail(user.id)">
+                Dettaglio
+              </button>
+
+              <button
+                type="button"
+                class="danger-btn"
+                [disabled]="isDeletingUser(user.id)"
+                (click)="deleteUser(user)">
+                {{ isDeletingUser(user.id) ? 'Eliminazione...' : 'Elimina' }}
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
