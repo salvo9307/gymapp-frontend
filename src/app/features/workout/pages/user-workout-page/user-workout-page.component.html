@@ -1,7 +1,8 @@
 <div class="wrapper">
-  <div *ngIf="isLoading()" class="state-box">
-    Caricamento scheda...
-  </div>
+  <app-loading-spinner
+    *ngIf="isLoading()"
+    [overlay]="true">
+  </app-loading-spinner>
 
   <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
     {{ errorMessage() }}

@@ -2,11 +2,12 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserWorkoutService } from '../../../../core/services/user-workout.service';
 import { UserWorkoutDayResponse, UserWorkoutExerciseResponse, UserWorkoutPlanResponse} from '../../../../core/models/user-workout.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-user-workout-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './user-workout-page.component.html',
   styleUrl: './user-workout-page.component.scss'
 })

@@ -1,15 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminDashboardService } from '../../../../core/services/admin-dashboard.service';
-import {
-  AdminDashboardResponse,
-  AdminDashboardGymResponse
-} from '../../../../core/models/admin-dashboard.models';
+import {AdminDashboardResponse,AdminDashboardGymResponse} from '../../../../core/models/admin-dashboard.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-admin-dashboard-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,LoadingSpinnerComponent],
   templateUrl: './admin-dashboard-page.component.html',
   styleUrls: ['./admin-dashboard-page.component.scss']
 })

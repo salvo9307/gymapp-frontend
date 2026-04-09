@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { WorkoutService } from '../../../../core/services/workout.service';
 import { UserDetailResponse } from '../../../../core/models/user.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-user-detail-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LoadingSpinnerComponent],
   templateUrl: './user-detail-page.component.html',
   styleUrls: ['./user-detail-page.component.scss']
 })

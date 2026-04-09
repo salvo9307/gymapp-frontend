@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { CreateManagedUserRequest, UserSummaryResponse } from '../../../../core/models/user.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-user-list-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './user-list-page.component.html',
   styleUrls: ['./user-list-page.component.scss']
 })

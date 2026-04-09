@@ -7,9 +7,10 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading()" class="state-box">
-    Caricamento dettaglio utente...
-  </div>
+  <app-loading-spinner
+    *ngIf="isLoading()"
+    [overlay]="true">
+  </app-loading-spinner>
 
   <div *ngIf="errorMessage() && !isLoading()" class="state-box error">
     {{ errorMessage() }}
@@ -95,14 +96,14 @@
         Modifica scheda
       </button>
 
-      <button
+<!--    <button
         class="secondary-btn"
         type="button"
         [disabled]="!user()!.latestWorkoutPlanId"
         (click)="duplicateWorkoutPlan()">
         Duplica scheda
       </button>
-
+--> 
       <button
         class="secondary-btn"
         type="button"

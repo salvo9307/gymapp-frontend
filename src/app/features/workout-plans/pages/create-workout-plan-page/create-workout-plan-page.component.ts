@@ -7,14 +7,10 @@ import { forkJoin } from 'rxjs';
 import { WorkoutService } from '../../../../core/services/workout.service';
 import { ExerciseService } from '../../../../core/services/exercise.service';
 
-import {
-  CreateWorkoutPlanRequest,
-  WorkoutDayRequest,
-  WorkoutExerciseRequest,
-  WorkoutPlanResponse
-} from '../../../../core/models/workout.models';
+import {CreateWorkoutPlanRequest, WorkoutDayRequest, WorkoutExerciseRequest, WorkoutPlanResponse} from '../../../../core/models/workout.models';
 
 import { ExerciseResponse } from '../../../../core/models/exercise.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 type EditableExercise = {
   exerciseId: number | null;
@@ -33,7 +29,7 @@ type EditableDay = {
 @Component({
   selector: 'app-create-workout-plan-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './create-workout-plan-page.component.html',
   styleUrl: './create-workout-plan-page.component.scss'
 })

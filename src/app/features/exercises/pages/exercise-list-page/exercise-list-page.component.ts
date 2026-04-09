@@ -7,11 +7,12 @@ import {
   ExerciseResponse,
   UpdateExerciseRequest
 } from '../../../../core/models/exercise.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-exercise-list-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './exercise-list-page.component.html',
   styleUrl: './exercise-list-page.component.scss'
 })

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkoutService } from '../../../../core/services/workout.service';
 import { WorkoutPlanResponse } from '../../../../core/models/workout.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-user-workout-plan-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './user-workout-plan-page.component.html',
   styleUrl: './user-workout-plan-page.component.scss'
 })

@@ -2,11 +2,12 @@ import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DashboardService } from '../../../../core/services/dashboard.service';
 import { ManagerDashboardResponse } from '../../../../core/models/dashboard.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-manager-dashboard-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './manager-dashboard-page.component.html',
   styleUrls: ['./manager-dashboard-page.component.scss']
 })

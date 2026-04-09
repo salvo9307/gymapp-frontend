@@ -8,11 +8,12 @@ import {
   AppWorkoutExerciseResponse,
   AppWorkoutPlanResponse
 } from '../../../../core/models/app-workout.models';
+import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
   selector: 'app-user-app-workout-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './user-app-workout-page.component.html',
   styleUrls: ['./user-app-workout-page.component.scss']
 })

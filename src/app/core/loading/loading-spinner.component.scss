@@ -1,0 +1,34 @@
+.spinner-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* overlay scuro pagina */
+.spinner-overlay.active {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(2px);
+
+  z-index: 9999;
+}
+
+/* icona manubrio */
+.spinner-icon {
+  font-size: 46px;
+
+  color: #2c3e64;
+
+  animation: spin 1.2s cubic-bezier(.4, 0, .2, 1) infinite;
+
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.18));
+}
+
+/* animazione rotazione */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
