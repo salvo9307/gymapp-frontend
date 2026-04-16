@@ -9,7 +9,7 @@ import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinne
 @Component({
   selector: 'app-user-detail-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, LoadingSpinnerComponent],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './user-detail-page.component.html',
   styleUrls: ['./user-detail-page.component.scss']
 })
