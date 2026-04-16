@@ -1,34 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+$gold: #D4A853;
+$gold-light: #E8C47A;
+$gold-dim: rgba(212, 168, 83, 0.15);
+$gold-border: rgba(212, 168, 83, 0.25);
+$orange: #E8722A;
+
+$surface-0: #080A0F;
+$surface-1: #0E1117;
+$surface-2: #141820;
+$surface-3: #1C2130;
+$surface-border: rgba(255, 255, 255, 0.07);
+
+$text-primary: #F0EDE6;
+$text-secondary: #8A91A0;
+$text-muted: #4A5060;
+
+$green: #3CC98A;
+$green-dim: rgba(60, 201, 138, 0.12);
+$red: #E05252;
+$red-dim: rgba(224, 82, 82, 0.12);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: $text-primary;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .create-workout-page {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.page-header h1 {
-  margin: 10px 0 0;
-  font-size: 28px;
-}
+// ── Header ─────────────────────────────────────────
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-.page-header p {
-  margin: 6px 0 0;
-  color: #6b7280;
+  h1 {
+    margin: 10px 0 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: $text-primary;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 42px;
+      height: 3px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, $gold, $orange);
+    }
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: $text-secondary;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 .back-button {
   border: none;
   background: transparent;
-  color: #374151;
+  color: $gold;
   padding: 0;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  transition: opacity 0.18s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
+// ── Cards ──────────────────────────────────────────
 .form-card,
 .day-card,
 .state-box,
 .actions-panel {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: $surface-1;
+  border: 1px solid $surface-border;
   border-radius: 18px;
 }
 
@@ -38,35 +105,60 @@
   padding: 20px;
 }
 
+.day-card {
+  transition: border-color 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    border-color: $gold-border;
+    transform: translateY(-2px);
+  }
+}
+
+// ── Labels ─────────────────────────────────────────
 .field-label,
 .label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7280;
+  letter-spacing: 0.08em;
+  color: $text-secondary;
   margin-bottom: 8px;
+  font-weight: 700;
 }
 
+// ── Inputs ─────────────────────────────────────────
 input,
 select {
   width: 100%;
   min-width: 0;
   height: 44px;
-  border: 1px solid #d1d5db;
+  border: 1px solid $surface-border;
   border-radius: 12px;
   padding: 0 14px;
   font-size: 14px;
-  background: white;
+  background: $surface-2;
+  color: $text-primary;
   outline: none;
   box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.18s ease, background 0.18s ease;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    border-color: $gold-border;
+    background: $surface-3;
+  }
+
+  option {
+    background: $surface-2;
+    color: $text-primary;
+  }
 }
 
-input:focus,
-select:focus {
-  border-color: #111827;
-}
-
+// ── Sections ───────────────────────────────────────
 .days-section {
   display: flex;
   flex-direction: column;
@@ -78,10 +170,15 @@ select:focus {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-}
 
-.section-header h2 {
-  margin: 0;
+  h2 {
+    margin: 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: 0.01em;
+  }
 }
 
 .day-top {
@@ -100,6 +197,7 @@ select:focus {
   margin-bottom: 16px;
 }
 
+// ── Exercise table ─────────────────────────────────
 .exercise-table {
   display: flex;
   flex-direction: column;
@@ -111,31 +209,45 @@ select:focus {
   grid-template-columns: minmax(260px, 1fr) 120px 160px 160px 120px;
   gap: 12px;
   align-items: center;
-}
-
-.exercise-row.header {
-  font-size: 13px;
-  font-weight: 600;
-  color: #6b7280;
-  padding: 0 4px 4px;
-}
-
-.exercise-row > div {
   min-width: 0;
+
+  > div {
+    min-width: 0;
+  }
+
+  &.header {
+    font-size: 12px;
+    font-weight: 700;
+    color: $text-secondary;
+    padding: 0 4px 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &:not(.header) {
+    background: $surface-2;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 14px;
+  }
 }
 
 .empty-day {
-  color: #6b7280;
-  background: #f8fafc;
+  color: $text-secondary;
+  background: $surface-2;
+  border: 1px solid $surface-border;
   border-radius: 14px;
   padding: 16px;
+  font-size: 14px;
 }
 
+// ── Actions panel ──────────────────────────────────
 .actions-panel {
   display: flex;
   justify-content: flex-end;
 }
 
+// ── Buttons ────────────────────────────────────────
 .primary-btn,
 .secondary-btn,
 .ghost-btn,
@@ -146,26 +258,50 @@ select:focus {
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  transition: transform 0.15s ease, opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
 .primary-btn {
-  background: #111827;
-  color: white;
+  background: linear-gradient(135deg, $gold 0%, $orange 100%);
+  color: #0E0C08;
+
+  &:hover:not(:disabled) {
+    opacity: 0.94;
+  }
 }
 
 .secondary-btn {
-  background: #eef2ff;
-  color: #3730a3;
+  background: $gold-dim;
+  color: $gold;
+  border: 1px solid $gold-border;
 }
 
 .ghost-btn {
-  background: #f3f4f6;
-  color: #374151;
+  background: $surface-2;
+  color: $text-primary;
+  border: 1px solid $surface-border;
+
+  &:hover:not(:disabled) {
+    background: $surface-3;
+  }
 }
 
 .danger-btn {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: $red-dim;
+  color: $red;
+  border: 1px solid rgba(224, 82, 82, 0.22);
 }
 
 .small {
@@ -173,22 +309,57 @@ select:focus {
   font-size: 13px;
 }
 
+// ── State boxes ────────────────────────────────────
 .state-box {
   padding: 18px;
+  color: $text-secondary;
+  font-size: 14px;
+
+  &.error {
+    color: #F09090;
+    border-color: rgba(224, 82, 82, 0.22);
+    background: $red-dim;
+  }
+
+  &.success {
+    color: #70D4A0;
+    border-color: rgba(60, 201, 138, 0.22);
+    background: $green-dim;
+  }
 }
 
-.state-box.error {
-  color: #b91c1c;
-  border-color: #fecaca;
-  background: #fef2f2;
+// ── Page actions ───────────────────────────────────
+.page-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
 }
 
-.state-box.success {
-  color: #065f46;
-  border-color: #a7f3d0;
-  background: #ecfdf5;
+// ── Feedback ───────────────────────────────────────
+.feedback-message {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.45;
+
+  &.success {
+    background: $green-dim;
+    color: #70D4A0;
+    border: 1px solid rgba(60, 201, 138, 0.24);
+  }
+
+  &.error {
+    background: $red-dim;
+    color: #F09090;
+    border: 1px solid rgba(224, 82, 82, 0.24);
+  }
 }
 
+// ── Responsive ─────────────────────────────────────
 @media (max-width: 1200px) {
   .exercise-row {
     grid-template-columns: minmax(220px, 1fr) 110px 130px 140px 110px;
@@ -212,8 +383,8 @@ select:focus {
     display: none;
   }
 
-  .exercise-row {
-    background: #f8fafc;
+  .exercise-row:not(.header) {
+    background: $surface-2;
     border-radius: 14px;
     padding: 14px;
   }
@@ -225,30 +396,15 @@ select:focus {
   .actions-panel .primary-btn {
     width: 100%;
   }
-}
 
-.page-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
+  .page-actions {
+    flex-direction: column;
 
-.feedback-message {
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-
-.feedback-message.success {
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
-}
-
-.feedback-message.error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+    .primary-btn,
+    .secondary-btn,
+    .ghost-btn,
+    .danger-btn {
+      width: 100%;
+    }
+  }
 }

@@ -1,58 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+$gold: #D4A853;
+$gold-light: #E8C47A;
+$gold-dim: rgba(212, 168, 83, 0.15);
+$gold-border: rgba(212, 168, 83, 0.25);
+$orange: #E8722A;
+
+$surface-0: #080A0F;
+$surface-1: #0E1117;
+$surface-2: #141820;
+$surface-3: #1C2130;
+$surface-border: rgba(255, 255, 255, 0.07);
+
+$text-primary: #F0EDE6;
+$text-secondary: #8A91A0;
+$text-muted: #4A5060;
+
+$red: #E05252;
+$red-dim: rgba(224, 82, 82, 0.12);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: $text-primary;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .workout-page {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.page-header h1 {
-  margin: 10px 0 0;
-  font-size: 28px;
-}
+// ── Header ─────────────────────────────────────────
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-.page-header p {
-  margin: 6px 0 0;
-  color: #6b7280;
+  h1 {
+    margin: 10px 0 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: $text-primary;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 42px;
+      height: 3px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, $gold, $orange);
+    }
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: $text-secondary;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 .back-button {
   border: none;
   background: transparent;
-  color: #374151;
+  color: $gold;
   padding: 0;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  transition: opacity 0.18s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
+// ── Cards ──────────────────────────────────────────
 .plan-card,
 .day-card,
 .state-box {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: $surface-1;
+  border: 1px solid $surface-border;
   border-radius: 18px;
 }
 
 .plan-card {
   padding: 22px;
-}
+  border-color: $gold-border;
+  position: relative;
+  overflow: hidden;
 
-.plan-card h2 {
-  margin: 8px 0;
-  font-size: 28px;
-  color: #111827;
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -50px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
-.plan-card p {
-  margin: 0;
-  color: #6b7280;
+  h2 {
+    margin: 8px 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    margin: 0;
+    color: $text-secondary;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 .label {
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7280;
+  letter-spacing: 0.08em;
+  color: $gold;
+  font-weight: 700;
 }
 
+// ── Days ───────────────────────────────────────────
 .days-list {
   display: flex;
   flex-direction: column;
@@ -61,14 +148,26 @@
 
 .day-card {
   padding: 20px;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    border-color: $gold-border;
+    transform: translateY(-2px);
+  }
 }
 
-.day-header h3 {
-  margin: 6px 0 0;
-  font-size: 22px;
-  color: #111827;
+.day-header {
+  h3 {
+    margin: 6px 0 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: 0.01em;
+  }
 }
 
+// ── Exercises ──────────────────────────────────────
 .exercise-list {
   display: flex;
   flex-direction: column;
@@ -83,23 +182,25 @@
   gap: 16px;
   padding: 16px;
   border-radius: 14px;
-  background: #f8fafc;
+  background: $surface-2;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .exercise-main {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
 
-.exercise-main strong {
-  color: #111827;
-  font-size: 16px;
-}
+  strong {
+    color: $text-primary;
+    font-size: 16px;
+    font-weight: 700;
+  }
 
-.exercise-main span {
-  color: #6b7280;
-  font-size: 14px;
+  span {
+    color: $text-secondary;
+    font-size: 14px;
+  }
 }
 
 .exercise-weight {
@@ -108,36 +209,48 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
 
-.exercise-weight span {
-  color: #6b7280;
-  font-size: 13px;
-}
+  span {
+    color: $text-secondary;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+  }
 
-.exercise-weight strong {
-  color: #111827;
-  font-size: 18px;
+  strong {
+    color: $gold;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+  }
 }
 
 .empty-day {
   margin-top: 18px;
-  color: #6b7280;
-  background: #f8fafc;
+  color: $text-secondary;
+  background: $surface-2;
+  border: 1px solid $surface-border;
   border-radius: 14px;
   padding: 16px;
+  font-size: 14px;
 }
 
+// ── State ──────────────────────────────────────────
 .state-box {
   padding: 18px;
+  color: $text-secondary;
+  font-size: 14px;
+
+  &.error {
+    color: #F09090;
+    border-color: rgba(224, 82, 82, 0.22);
+    background: $red-dim;
+  }
 }
 
-.state-box.error {
-  color: #b91c1c;
-  border-color: #fecaca;
-  background: #fef2f2;
-}
-
+// ── Responsive ─────────────────────────────────────
 @media (max-width: 700px) {
   .exercise-row {
     flex-direction: column;
@@ -147,5 +260,13 @@
   .exercise-weight {
     min-width: auto;
     text-align: left;
+  }
+
+  .plan-card h2 {
+    font-size: 28px;
+  }
+
+  .day-header h3 {
+    font-size: 22px;
   }
 }

@@ -1,19 +1,39 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #020617;
+  background: #080A0F;
   overflow-x: hidden;
 }
 
 body {
-  font-family: Inter, system-ui, Arial, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #F0EDE6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 app-root {
   display: block;
   min-height: 100vh;
-  background: #020617;
+  background: #080A0F;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 168, 83, 0.2) transparent;
+}
+
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.2);
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 83, 0.4);
 }

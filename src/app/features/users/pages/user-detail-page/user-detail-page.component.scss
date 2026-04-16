@@ -1,39 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+$gold: #D4A853;
+$gold-light: #E8C47A;
+$gold-dim: rgba(212, 168, 83, 0.15);
+$gold-border: rgba(212, 168, 83, 0.25);
+$orange: #E8722A;
+
+$surface-0: #080A0F;
+$surface-1: #0E1117;
+$surface-2: #141820;
+$surface-3: #1C2130;
+$surface-border: rgba(255, 255, 255, 0.07);
+
+$text-primary: #F0EDE6;
+$text-secondary: #8A91A0;
+$text-muted: #4A5060;
+
+$green: #3CC98A;
+$green-dim: rgba(60, 201, 138, 0.12);
+$red: #E05252;
+$red-dim: rgba(224, 82, 82, 0.12);
+$amber: #E8A030;
+$amber-dim: rgba(232, 160, 48, 0.12);
+
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: $text-primary;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .user-detail-page {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.page-header h1 {
-  margin: 10px 0 0;
-  font-size: 28px;
-}
+// ── Header ─────────────────────────────────────────
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-.page-header p {
-  margin: 6px 0 0;
-  color: #6b7280;
+  h1 {
+    margin: 10px 0 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: $text-primary;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 42px;
+      height: 3px;
+      margin-top: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, $gold, $orange);
+    }
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: $text-secondary;
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 .back-button {
   border: none;
   background: transparent;
-  color: #374151;
+  color: $gold;
   padding: 0;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  transition: opacity 0.18s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
+// ── Grid ───────────────────────────────────────────
 .detail-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
+.full-width {
+  grid-column: 1 / -1;
+}
+
+// ── Cards ──────────────────────────────────────────
 .detail-card,
 .state-box,
 .actions-panel {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: $surface-1;
+  border: 1px solid $surface-border;
   border-radius: 18px;
 }
 
@@ -42,48 +116,62 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    border-color: $gold-border;
+    transform: translateY(-2px);
+  }
 }
 
-.main-card h2 {
-  margin: 0;
-  font-size: 28px;
-  color: #111827;
-}
+.main-card {
+  h2 {
+    margin: 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.05;
+  }
 
-.main-card p {
-  margin: 0;
-  color: #6b7280;
+  p {
+    margin: 0;
+    color: $text-secondary;
+    font-size: 14px;
+  }
 }
 
 .label {
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7280;
+  letter-spacing: 0.08em;
+  color: $text-secondary;
+  font-weight: 700;
 }
 
 .detail-card strong {
-  font-size: 24px;
-  color: #111827;
-}
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: $text-primary;
 
-.detail-card strong.ok {
-  color: #047857;
-}
+  &.ok {
+    color: $green;
+  }
 
-.detail-card strong.no {
-  color: #b91c1c;
-}
-
-.full-width {
-  grid-column: 1 / -1;
+  &.no {
+    color: $red;
+  }
 }
 
 .plan-meta {
   font-size: 14px;
-  color: #6b7280;
+  color: $text-secondary;
+  line-height: 1.5;
 }
 
+// ── Actions panel ──────────────────────────────────
 .actions-panel {
   padding: 18px;
   display: flex;
@@ -91,6 +179,7 @@
   flex-wrap: wrap;
 }
 
+// ── Buttons ────────────────────────────────────────
 .primary-btn,
 .secondary-btn {
   border: none;
@@ -98,92 +187,138 @@
   padding: 12px 16px;
   cursor: pointer;
   font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  transition: transform 0.15s ease, opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
 }
 
 .primary-btn {
-  background: #111827;
-  color: white;
-}
+  background: linear-gradient(135deg, $gold 0%, $orange 100%);
+  color: #0E0C08;
 
-.primary-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  &:hover:not(:disabled) {
+    opacity: 0.94;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
 .secondary-btn {
-  background: #eef2ff;
-  color: #3730a3;
+  background: $gold-dim;
+  color: $gold;
+  border: 1px solid $gold-border;
+
+  &:hover {
+    background: rgba(212, 168, 83, 0.22);
+  }
 }
 
+// ── State box ──────────────────────────────────────
 .state-box {
   padding: 18px;
+  color: $text-secondary;
+  font-size: 14px;
+
+  &.error {
+    color: #F09090;
+    border-color: rgba(224, 82, 82, 0.22);
+    background: $red-dim;
+  }
 }
 
-.state-box.error {
-  color: #b91c1c;
-  border-color: #fecaca;
-  background: #fef2f2;
-}
-
+// ── Reset password ─────────────────────────────────
 .reset-password-panel {
   margin-top: 20px;
   padding: 20px;
   border-radius: 16px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-}
+  background: $surface-2;
+  border: 1px solid $surface-border;
 
-.reset-password-panel h3 {
-  margin: 0 0 12px;
+  h3 {
+    margin: 0 0 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: 0.01em;
+  }
 }
 
 .reset-password-form {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+
+  input {
+    min-width: 260px;
+    flex: 1;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid $surface-border;
+    border-radius: 10px;
+    background: $surface-3;
+    color: $text-primary;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.18s ease, background 0.18s ease;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      border-color: $gold-border;
+      background: $surface-2;
+    }
+  }
 }
 
-.reset-password-form input {
-  min-width: 260px;
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-}
-
+// ── Feedback ───────────────────────────────────────
 .feedback-message {
   margin-top: 16px;
   padding: 12px 14px;
   border-radius: 10px;
   font-weight: 500;
+  font-size: 14px;
+  line-height: 1.45;
+
+  &.success {
+    background: $green-dim;
+    color: #70D4A0;
+    border: 1px solid rgba(60, 201, 138, 0.24);
+  }
+
+  &.error {
+    background: $red-dim;
+    color: #F09090;
+    border: 1px solid rgba(224, 82, 82, 0.24);
+  }
 }
 
-.feedback-message.success {
-  background: #dcfce7;
-  color: #166534;
-  border: 1px solid #bbf7d0;
-}
-
-.feedback-message.error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-
+// ── Subscription ───────────────────────────────────
 .subscription-card {
   position: relative;
 }
 
 .subscription-status {
   margin-bottom: 10px;
-}
 
-.subscription-status .ok {
-  color: #16a34a;
-}
+  .ok {
+    color: $green;
+  }
 
-.subscription-status .no {
-  color: #dc2626;
+  .no {
+    color: $red;
+  }
 }
 
 .renew-actions {
@@ -191,28 +326,55 @@
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
+
+  select {
+    min-width: 120px;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid $surface-border;
+    background: $surface-2;
+    color: $text-primary;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.18s ease;
+
+    &:focus {
+      border-color: $gold-border;
+    }
+
+    option {
+      background: $surface-2;
+      color: $text-primary;
+    }
+  }
+
+  button {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, $gold 0%, $orange 100%);
+    color: #0E0C08;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.18s ease, transform 0.15s ease;
+
+    &:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+    }
+  }
 }
 
-.renew-actions select {
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: white;
-}
-
-.renew-actions button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #111827;
-  color: white;
-  cursor: pointer;
-}
-
+// ── Modal ──────────────────────────────────────────
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(5, 7, 12, 0.75);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,10 +385,10 @@
 .renew-modal {
   width: 100%;
   max-width: 520px;
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
+  background: $surface-1;
+  border-radius: 22px;
+  border: 1px solid $gold-border;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
   padding: 22px;
   display: flex;
   flex-direction: column;
@@ -238,61 +400,101 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-}
 
-.renew-modal-header h3 {
-  margin: 0;
-  font-size: 22px;
-  color: #111827;
+  h3 {
+    margin: 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: $text-primary;
+  }
 }
 
 .modal-close-btn {
-  border: none;
-  background: transparent;
-  font-size: 28px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid $surface-border;
+  border-radius: 8px;
+  background: $surface-2;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  color: #6b7280;
+  color: $text-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $surface-3;
+    color: $text-primary;
+  }
 }
 
 .renew-modal-text {
   margin: 0;
-  color: #6b7280;
+  color: $text-secondary;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .renew-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-}
 
-.renew-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-.renew-form span {
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-}
+  span {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $text-secondary;
+  }
 
-.renew-form select,
-.renew-form input {
-  padding: 11px 12px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  background: white;
-  font-size: 14px;
+  select,
+  input {
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid $surface-border;
+    background: $surface-2;
+    color: $text-primary;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.18s ease, background 0.18s ease;
+
+    &:focus {
+      border-color: $gold-border;
+      background: $surface-3;
+    }
+
+    option {
+      background: $surface-2;
+      color: $text-primary;
+    }
+  }
 }
 
 .renew-preview {
   padding: 14px 16px;
   border-radius: 12px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  color: #374151;
+  background: $gold-dim;
+  border: 1px solid $gold-border;
+  color: $text-secondary;
+  font-size: 14px;
+  line-height: 1.45;
+
+  strong {
+    color: $gold;
+    font-weight: 700;
+  }
 }
 
 .renew-modal-actions {
@@ -302,6 +504,7 @@
   flex-wrap: wrap;
 }
 
+// ── Responsive ─────────────────────────────────────
 @media (max-width: 900px) {
   .detail-grid {
     grid-template-columns: 1fr;
@@ -319,6 +522,25 @@
 
   .renew-modal {
     padding: 18px;
-    border-radius: 16px;
+    border-radius: 18px;
+  }
+
+  .actions-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reset-password-form {
+    flex-direction: column;
+  }
+
+  .renew-actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    select,
+    button {
+      width: 100%;
+    }
   }
 }
