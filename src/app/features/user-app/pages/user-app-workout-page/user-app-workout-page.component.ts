@@ -9,6 +9,7 @@ import {
   AppWorkoutPlanResponse
 } from '../../../../core/models/app-workout.models';
 import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
+import { PushNotificationService } from '../../../../core/services/push-notification.service';
 
 @Component({
   selector: 'app-user-app-workout-page',
@@ -21,6 +22,9 @@ export class UserAppWorkoutPageComponent implements OnInit {
   private appWorkoutService = inject(AppWorkoutService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private pushNotificationService = inject(PushNotificationService);
+  pushStatus = signal('');
+  showPushBox = signal(true);
 
   workoutPlan = signal<AppWorkoutPlanResponse | null>(null);
   isLoading = signal(true);
@@ -40,6 +44,7 @@ export class UserAppWorkoutPageComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.showPushBox.set(localStorage.getItem('push_notifications_enabled') !== 'true');
     this.loadWorkoutPlan();
   }
 
@@ -59,6 +64,27 @@ export class UserAppWorkoutPageComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  enablePush(): void {
+    this.pushStatus.set('Attivazione notifiche...');
+
+    this.pushNotificationService.enableNotifications()
+      .then(() => {
+        localStorage.setItem('push_notifications_enabled', 'true');
+
+        this.pushStatus.set('Notifiche attivate correttamente');
+
+        setTimeout(() => {
+          this.pushStatus.set('');
+          this.showPushBox.set(false);
+        }, 1200);
+      })
+      .catch(err => {
+        console.error('PUSH ENABLE ERROR', err);
+        this.pushStatus.set('Impossibile attivare le notifiche');
+        setTimeout(() => this.pushStatus.set(''), 3000);
+      });
   }
 
   logout(): void {

@@ -456,3 +456,52 @@ input[type='number']:focus {
     font-weight: 700;
   }
 }
+
+.push-card {
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(15, 23, 42, 0.95));
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.push-card h3 {
+  margin: 0 0 6px;
+  color: #fbbf24;
+}
+
+.push-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.push-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.push-status {
+  margin-top: 10px;
+  color: #fbbf24;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .push-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .push-actions {
+    width: 100%;
+  }
+
+  .push-actions button {
+    flex: 1;
+  }
+}

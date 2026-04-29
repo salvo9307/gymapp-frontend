@@ -17,6 +17,22 @@
       <div class="save-status">{{ saveStatus() }}</div>
     </div>
   </div>
+  <div class="push-card" *ngIf="showPushBox()">
+    <div>
+      <h3>🔔 Notifiche abbonamento</h3>
+      <p>Attiva gli avvisi per ricevere una notifica quando il tuo abbonamento sta per scadere.</p>
+
+      <div *ngIf="pushStatus()" class="push-status">
+        {{ pushStatus() }}
+      </div>
+    </div>
+
+    <div class="push-actions">
+      <button class="btn-primary" type="button" (click)="enablePush()">
+        Attiva notifiche
+      </button>
+    </div>
+  </div>
 
   <app-loading-spinner
     *ngIf="isLoading()"
