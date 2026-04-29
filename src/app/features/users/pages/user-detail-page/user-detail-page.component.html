@@ -59,14 +59,14 @@
           </ng-template>
         </div>
 
-          <div class="renew-actions">
-            <button
-              class="primary-btn"
-              type="button"
-              (click)="openRenewModal(1)">
-              {{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}
-            </button>
-          </div>
+        <div class="renew-actions">
+          <button
+            class="primary-btn"
+            type="button"
+            (click)="openRenewModal(1)">
+            {{ isSubscriptionActive() ? 'Estendi abbonamento' : 'Rinnova abbonamento' }}
+          </button>
+        </div>
       </div>
 
       <div class="detail-card full-width">
@@ -96,19 +96,18 @@
         Modifica scheda
       </button>
 
-<!--    <button
-        class="secondary-btn"
-        type="button"
-        [disabled]="!user()!.latestWorkoutPlanId"
-        (click)="duplicateWorkoutPlan()">
-        Duplica scheda
-      </button>
---> 
       <button
         class="secondary-btn"
         type="button"
         (click)="createWorkoutPlan()">
         Nuova scheda
+      </button>
+
+      <button
+        class="secondary-btn template-btn"
+        type="button"
+        (click)="openTemplateModal()">
+        Usa template
       </button>
 
       <button
@@ -208,6 +207,53 @@
           [disabled]="isRenewingSubscription()"
           (click)="confirmRenewSubscription()">
           {{ isRenewingSubscription() ? 'Salvataggio...' : 'Conferma' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="showTemplateModal()" (click)="closeTemplateModal()">
+    <div class="template-modal" (click)="$event.stopPropagation()">
+      <div class="renew-modal-header">
+        <h3>Usa template scheda</h3>
+        <button class="modal-close-btn" type="button" (click)="closeTemplateModal()">×</button>
+      </div>
+
+      <p class="renew-modal-text">
+        Seleziona una scheda già pronta da assegnare a questo utente.
+      </p>
+
+      <div class="feedback-message error" *ngIf="templateErrorMessage()">
+        {{ templateErrorMessage() }}
+      </div>
+
+      <div class="empty-template-state" *ngIf="isLoadingTemplates()">
+        Caricamento template...
+      </div>
+
+      <div class="template-list" *ngIf="!isLoadingTemplates() && templates().length > 0">
+        <button
+          class="template-item"
+          type="button"
+          *ngFor="let template of templates()"
+          [disabled]="isApplyingTemplate()"
+          (click)="applyTemplate(template.id)">
+          <span>{{ template.title }}</span>
+          <small>{{ isApplyingTemplate() ? 'Applicazione...' : 'Usa questo template' }}</small>
+        </button>
+      </div>
+
+      <div class="empty-template-state" *ngIf="!isLoadingTemplates() && templates().length === 0">
+        Nessun template disponibile. Crea prima un template dalla sezione “Template Schede”.
+      </div>
+
+      <div class="renew-modal-actions">
+        <button
+          class="secondary-btn"
+          type="button"
+          [disabled]="isApplyingTemplate()"
+          (click)="closeTemplateModal()">
+          Annulla
         </button>
       </div>
     </div>

@@ -112,6 +112,15 @@ export const routes: Routes = [
           )
       },
       {
+        path: 'manager/templates',
+        canActivate: [roleGuard],
+        data: { roles: ['MANAGER', 'ADMIN'] },
+        loadComponent: () =>
+          import('./features/workout-plans/pages/workout-template-page/workout-template-page.component').then(
+            m => m.WorkoutTemplatePageComponent
+          )
+      },
+      {
         path: 'change-password',
         canActivate: [authGuard],
         loadComponent: () =>

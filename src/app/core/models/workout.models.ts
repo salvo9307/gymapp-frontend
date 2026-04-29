@@ -1,12 +1,28 @@
-export interface WorkoutExerciseResponse {
-  id: number;
-  exerciseId?: number | null;
-  exerciseName: string;
+export interface CreateWorkoutPlanRequest {
+  userId: number;
+  title: string;
+  days: WorkoutDayRequest[];
+}
+
+export interface WorkoutDayRequest {
+  dayOrder: number;
+  title: string;
+  exercises: WorkoutExerciseRequest[];
+}
+
+export interface WorkoutExerciseRequest {
+  exerciseId: number;
   exerciseOrder: number;
   sets: number | null;
   reps: string | null;
-  lastWeight: number | null;
-  restSeconds: number | null;
+  restSeconds?: number | null;
+}
+
+export interface WorkoutPlanResponse {
+  id: number;
+  title: string;
+  days: WorkoutDayResponse[];
+  subscriptionEndDate?: string | null;
 }
 
 export interface WorkoutDayResponse {
@@ -16,30 +32,42 @@ export interface WorkoutDayResponse {
   exercises: WorkoutExerciseResponse[];
 }
 
-export interface WorkoutPlanResponse {
-  id: number;
-  title: string;
-  active: boolean;
-  userId: number;
-  days: WorkoutDayResponse[];
-}
-
-export interface WorkoutExerciseRequest {
-  exerciseId: number;
+export interface WorkoutExerciseResponse {
+  workoutDayExerciseId: number;
+  exerciseId?: number | null;
+  exerciseName: string;
   exerciseOrder: number;
   sets: number | null;
   reps: string | null;
-  restSeconds: number | null;
+  restSeconds?: number | null;
+  lastWeight?: number | null;
+  weight?: number | null;
 }
 
-export interface WorkoutDayRequest {
+export interface WorkoutTemplateSummaryResponse {
+  id: number;
+  title: string;
+}
+
+export interface WorkoutTemplateResponse {
+  id: number;
+  title: string;
+  days: WorkoutTemplateDayResponse[];
+}
+
+export interface WorkoutTemplateDayResponse {
+  id: number;
   dayOrder: number;
   title: string;
-  exercises: WorkoutExerciseRequest[];
+  exercises: WorkoutTemplateExerciseResponse[];
 }
 
-export interface CreateWorkoutPlanRequest {
-  userId: number;
-  title: string;
-  days: WorkoutDayRequest[];
+export interface WorkoutTemplateExerciseResponse {
+  id: number;
+  exerciseId: number;
+  exerciseName: string;
+  exerciseOrder: number;
+  sets: number | null;
+  reps: string | null;
+  restSeconds?: number | null;
 }

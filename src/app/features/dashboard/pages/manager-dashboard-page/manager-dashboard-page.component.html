@@ -56,17 +56,17 @@
       <div class="subscription-grid">
         <div class="mini-stat-card success">
           <span class="label">Abbonamenti attivi</span>
-          <strong>{{ dashboard.activeSubscriptionsCount ?? 0 }}</strong>
+          <strong>{{ dashboard.activeSubscriptionsCount }}</strong>
         </div>
 
         <div class="mini-stat-card warning">
           <span class="label">In scadenza</span>
-          <strong>{{ dashboard.expiringUsersCount ?? 0 }}</strong>
+          <strong>{{ dashboard.expiringUsersCount }}</strong>
         </div>
 
         <div class="mini-stat-card danger">
           <span class="label">Scaduti</span>
-          <strong>{{ dashboard.expiredUsersCount ?? 0 }}</strong>
+          <strong>{{ dashboard.expiredUsersCount }}</strong>
         </div>
       </div>
 

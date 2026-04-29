@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { WorkoutService } from '../../../../core/services/workout.service';
 import { UserDetailResponse } from '../../../../core/models/user.models';
+import { WorkoutTemplateSummaryResponse } from '../../../../core/models/workout.models';
 import { LoadingSpinnerComponent } from '../../../../core/loading/loading-spinner.component';
 
 @Component({
@@ -23,6 +24,7 @@ export class UserDetailPageComponent implements OnInit {
   isLoading = signal(true);
   errorMessage = signal('');
   userId = signal<number | null>(null);
+
   isUpdatingStatus = signal(false);
   showResetPasswordForm = signal(false);
   newPassword = signal('');
@@ -34,6 +36,12 @@ export class UserDetailPageComponent implements OnInit {
   selectedMonths = signal(1);
   selectedStartDate = signal('');
   isRenewingSubscription = signal(false);
+
+  showTemplateModal = signal(false);
+  templates = signal<WorkoutTemplateSummaryResponse[]>([]);
+  isLoadingTemplates = signal(false);
+  isApplyingTemplate = signal(false);
+  templateErrorMessage = signal('');
 
   previewEndDate = computed(() => {
     const startDate = this.selectedStartDate();
@@ -123,6 +131,67 @@ export class UserDetailPageComponent implements OnInit {
       error: err => {
         console.error('Errore duplicazione scheda', err);
         alert('Errore durante la duplicazione della scheda');
+      }
+    });
+  }
+
+  openTemplateModal(): void {
+    this.templateErrorMessage.set('');
+    this.showTemplateModal.set(true);
+    this.loadTemplates();
+  }
+
+  closeTemplateModal(): void {
+    if (this.isApplyingTemplate()) {
+      return;
+    }
+
+    this.showTemplateModal.set(false);
+    this.templateErrorMessage.set('');
+  }
+
+  loadTemplates(): void {
+    this.isLoadingTemplates.set(true);
+    this.templateErrorMessage.set('');
+
+    this.workoutService.getWorkoutTemplates().subscribe({
+      next: response => {
+        this.templates.set(response);
+        this.isLoadingTemplates.set(false);
+      },
+      error: err => {
+        console.error('Errore caricamento template', err);
+        this.templateErrorMessage.set(
+          err?.error?.message || 'Errore durante il caricamento dei template'
+        );
+        this.isLoadingTemplates.set(false);
+      }
+    });
+  }
+
+  applyTemplate(templateId: number): void {
+    const userId = this.userId();
+
+    if (!userId || this.isApplyingTemplate()) {
+      return;
+    }
+
+    this.isApplyingTemplate.set(true);
+    this.templateErrorMessage.set('');
+
+    this.workoutService.applyWorkoutTemplate(templateId, userId).subscribe({
+      next: () => {
+        this.isApplyingTemplate.set(false);
+        this.showTemplateModal.set(false);
+        this.successMessage.set('Template applicato con successo');
+        this.loadUser(userId);
+      },
+      error: err => {
+        console.error('Errore applicazione template', err);
+        this.isApplyingTemplate.set(false);
+        this.templateErrorMessage.set(
+          err?.error?.message || 'Errore durante l’applicazione del template'
+        );
       }
     });
   }
@@ -325,10 +394,10 @@ export class UserDetailPageComponent implements OnInit {
   }
 
   private toDateInputValue(dateValue: string | Date): string {
-  const date = new Date(dateValue);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+    const date = new Date(dateValue);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 }
