@@ -82,8 +82,15 @@ export class UserAppWorkoutPageComponent implements OnInit {
       })
       .catch(err => {
         console.error('PUSH ENABLE ERROR', err);
-        this.pushStatus.set('Impossibile attivare le notifiche');
-        setTimeout(() => this.pushStatus.set(''), 3000);
+
+        const message =
+          err?.message ||
+          err?.name ||
+          JSON.stringify(err);
+
+        this.pushStatus.set('Errore notifiche: ' + message);
+
+        setTimeout(() => this.pushStatus.set(''), 8000);
       });
   }
 
